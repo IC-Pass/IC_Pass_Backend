@@ -11,6 +11,9 @@ actor ICPass {
   type NewProfile = Types.NewProfile;
   type Profile = Types.Profile;
   type UserId = Types.UserId;
+  type Media = Types.Media;
+  type Tag = Types.Tag;
+  type Account = Types.Account;
 
   // Healthcheck
 
@@ -27,10 +30,22 @@ actor ICPass {
   };
 
   public shared (msg) func update(profile : Profile) : async (Result.Result<Text, Text>) {
-    switch (Utils.hasAccess(msg.caller, profile)) {
+    switch (Utils.hasAccess(msg.caller, profile.id)) {
       case (true) {
         directory.updateOne(profile.id, profile);
         return #ok("Updated successfully!");
+      };
+      case _ {
+        return #err("User do not have access!");
+      };
+    };
+  };
+
+  public shared (msg) func addNewAccount(account: Account) : async (Result.Result<Text, Text>) {
+    switch (Utils.hasAccess(msg.caller, account.id)) {
+      case (true) {
+        directory.addNewAccount(account);
+        return #ok("Account added successfully!")
       };
       case _ {
         return #err("User do not have access!");

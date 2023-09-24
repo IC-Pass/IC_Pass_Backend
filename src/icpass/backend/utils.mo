@@ -17,6 +17,7 @@ module {
         {
           id = userId;
           fullName = "";
+          accounts = [];
         };
       };
     };
@@ -31,7 +32,7 @@ module {
     Option.isSome(Array.find<UserId>(adminIds, identity));
   };
 
-  public func hasAccess(userId : UserId, profile : Profile) : Bool {
-    userId == profile.id or isAdmin(userId);
+  public func hasAccess(userId : UserId, profileId : UserId) : Bool {
+    userId == profileId or isAdmin(userId);
   };
 };
