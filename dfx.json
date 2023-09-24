@@ -1,7 +1,7 @@
 {
   "canisters": {
     "icpass": {
-      "main": "src/icpass/main.mo",
+      "main": "src/icpass/backend/main.mo",
       "type": "motoko"
     },
     "icpass_assets": {
