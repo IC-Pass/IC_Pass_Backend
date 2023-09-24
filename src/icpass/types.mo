@@ -4,17 +4,11 @@ module {
   public type UserId = Principal;
 
   public type NewProfile = {
-    fullname: Text;
-    email_notification: Bool;
-    system_notification: Bool;
-    show_wallet_number: Bool;
+    fullName : Text;
   };
 
   public type Profile = {
-    id: UserId;
-    fullname: Text;
-    email_notification: Bool;
-    system_notification: Bool;
-    show_wallet_number: Bool;
+    id : UserId;
+    fullName : Text;
   };
 };
