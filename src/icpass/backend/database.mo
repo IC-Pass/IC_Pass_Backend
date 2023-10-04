@@ -5,8 +5,10 @@ import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Buffer "mo:base/Buffer";
+import Trie "mo:base/Trie";
 
 import Types "./types";
+import Utils "utils/Utils";
 
 module {
   type NewProfile = Types.NewProfile;
@@ -17,20 +19,33 @@ module {
   type Account = Types.Account;
 
   public class Directory() {
-    // The "database" is just a local hash map
-    let hashMap = HashMap.HashMap<UserId, Profile>(1, isEq, Principal.hash);
 
-    public func createOne(userId : UserId, profile : NewProfile) {
-      hashMap.put(userId, makeProfile(userId, profile));
+    public func getProfile(_profiles : Trie.Trie<UserId, Profile>, userId : UserId) : Profile {
+      let existing = findOne(_profiles, userId);
+      switch (existing) {
+        case (?existing) { existing };
+        case (null) {
+          {
+            id = userId;
+            fullName = "";
+            accounts = [];
+          };
+        };
+      };
     };
 
-    public func updateOne(userId : UserId, profile : Profile) {
-      hashMap.put(userId, profile);
+    public func createOne(_profiles : Trie.Trie<UserId, Profile>, userId : UserId, profile : NewProfile) : Trie.Trie<UserId, Profile> {
+      Trie.put(_profiles, Utils.keyPrincipal(userId), Principal.equal, makeProfile(userId, profile)).0;
     };
 
-    public func addNewAccount(account: Account) {
+    public func updateOne(_profiles : Trie.Trie<UserId, Profile>, userId : UserId, profile : Profile) : Trie.Trie<UserId, Profile> {
+      Trie.put(_profiles, Utils.keyPrincipal(userId), Principal.equal, profile).0;
+    };
+
+    public func addNewAccount(_profiles : Trie.Trie<UserId, Profile>, account : Account) {
+      var profilesObj = _profiles;
       var bufferAccounts : Buffer.Buffer<Account> = Buffer.Buffer<Account>(0);
-      switch(findOne(account.id)) {
+      switch (findOne(profilesObj, account.id)) {
         case (?profile) {
           for (existingAccount in profile.accounts.vals()) {
             bufferAccounts.add(existingAccount);
@@ -41,14 +56,14 @@ module {
             fullName = profile.fullName;
             accounts = Buffer.toArray(bufferAccounts);
           };
-          hashMap.put(profile.id, profileObj);
+          profilesObj := updateOne(profilesObj, profile.id, profileObj);
         };
         case _ {};
       };
     };
 
-    public func findOne(userId : UserId) : ?Profile {
-      hashMap.get(userId);
+    public func findOne(_profiles : Trie.Trie<UserId, Profile>, userId : UserId) : ?Profile {
+      Trie.find(_profiles, Utils.keyPrincipal(userId), Principal.equal);
     };
 
     // Helpers
@@ -61,6 +76,4 @@ module {
       };
     };
   };
-
-  func isEq(x : UserId, y : UserId) : Bool { x == y };
 };

@@ -4,6 +4,8 @@ import Blob "mo:base/Blob";
 import Debug "mo:base/Debug";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
+import HashMap "mo:base/HashMap";
+import Trie "mo:base/Trie";
 
 import Database "./database";
 import Types "./types";
@@ -11,6 +13,21 @@ import Utils "utils/Utils";
 import Hex "utils/Hex";
 
 actor ICPass {
+
+  var directory : Database.Directory = Database.Directory();
+
+  type NewProfile = Types.NewProfile;
+  type Profile = Types.Profile;
+  type UserId = Types.UserId;
+  type Media = Types.Media;
+  type Tag = Types.Tag;
+  type Account = Types.Account;
+
+  private stable var _profiles : Trie.Trie<UserId, Profile> = Trie.empty();
+  private stable var _mediaList : [Media] = [];
+  private stable var _tagList : [Tag] = [];
+
+  // private stable var profileMap : HashMap.HashMap<UserId, Profile> = HashMap.HashMap<UserId, Profile>(1, Principal.equal, Principal.hash);
 
   type VETKD_SYSTEM_API = actor {
     vetkd_public_key : ({
@@ -28,35 +45,9 @@ actor ICPass {
 
   let vetkd_system_api : VETKD_SYSTEM_API = actor ("s55qq-oqaaa-aaaaa-aaakq-cai");
 
-  public shared ({ caller }) func app_vetkd_public_key(derivation_path : [Blob]) : async Text {
-    let { public_key } = await vetkd_system_api.vetkd_public_key({
-      canister_id = null;
-      derivation_path;
-      key_id = { curve = #bls12_381; name = "test_key_1" };
-    });
-    Hex.encode(Blob.toArray(public_key));
-  };
+  // Healthcheck
 
-  public shared ({ caller }) func symmetric_key_verification_key() : async Text {
-    let { public_key } = await vetkd_system_api.vetkd_public_key({
-      canister_id = null;
-      derivation_path = Array.make(Text.encodeUtf8("symmetric_key"));
-      key_id = { curve = #bls12_381; name = "test_key_1" };
-    });
-    Hex.encode(Blob.toArray(public_key));
-  };
-
-  public shared ({ caller }) func encrypted_symmetric_key_for_caller(encryption_public_key : Blob) : async Text {
-    Debug.print("encrypted_symmetric_key_for_caller: caller: " # debug_show (caller));
-
-    let { encrypted_key } = await vetkd_system_api.vetkd_encrypted_key({
-      derivation_id = Principal.toBlob(caller);
-      public_key_derivation_path = Array.make(Text.encodeUtf8("symmetric_key"));
-      key_id = { curve = #bls12_381; name = "test_key_1" };
-      encryption_public_key;
-    });
-    Hex.encode(Blob.toArray(encrypted_key));
-  };
+  public func healthcheck() : async Bool { true };
 
   public shared ({ caller }) func ibe_encryption_key() : async Text {
     let { public_key } = await vetkd_system_api.vetkd_public_key({
@@ -79,33 +70,20 @@ actor ICPass {
     Hex.encode(Blob.toArray(encrypted_key));
   };
 
-  var directory : Database.Directory = Database.Directory();
-
-  type NewProfile = Types.NewProfile;
-  type Profile = Types.Profile;
-  type UserId = Types.UserId;
-  type Media = Types.Media;
-  type Tag = Types.Tag;
-  type Account = Types.Account;
-
-  // Healthcheck
-
-  public func healthcheck() : async Bool { true };
-
   // Profiles
 
   public shared (msg) func create(profile : NewProfile) : async (Result.Result<Text, Text>) {
     if (Text.size(Text.trim(profile.fullName, #char ' ')) == 0) {
       return #err("Full name can't be blank!");
     };
-    directory.createOne(msg.caller, profile);
+    _profiles := directory.createOne(_profiles, msg.caller, profile);
     return #ok("Profile created!");
   };
 
   public shared (msg) func update(profile : Profile) : async (Result.Result<Text, Text>) {
     switch (Utils.hasAccess(msg.caller, profile.id)) {
       case (true) {
-        directory.updateOne(profile.id, profile);
+        _profiles := directory.updateOne(_profiles, profile.id, profile);
         return #ok("Updated successfully!");
       };
       case _ {
@@ -117,7 +95,7 @@ actor ICPass {
   public shared (msg) func addNewAccount(account : Account) : async (Result.Result<Text, Text>) {
     switch (Utils.hasAccess(msg.caller, account.id)) {
       case (true) {
-        directory.addNewAccount(account);
+        directory.addNewAccount(_profiles, account);
         return #ok("Account added successfully!");
       };
       case _ {
@@ -126,14 +104,21 @@ actor ICPass {
     };
   };
 
-  public query func get(userId : UserId) : async (Result.Result<Profile, Text>) {
-    let profile = Utils.getProfile(directory, userId);
-    switch (Text.size(profile.fullName) > 0) {
+  public shared query (msg) func get(userId : UserId) : async (Result.Result<Profile, Text>) {
+    switch (Utils.hasAccess(msg.caller, userId)) {
       case (true) {
-        return #ok(profile);
+        let profile = directory.getProfile(_profiles, userId);
+        switch (Text.size(profile.fullName) > 0) {
+          case (true) {
+            return #ok(profile);
+          };
+          case _ {
+            return #err("User not found");
+          };
+        };
       };
       case _ {
-        return #err("User not found");
+        return #err("User do not have access!");
       };
     };
   };
