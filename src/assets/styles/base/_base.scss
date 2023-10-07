@@ -1,0 +1,16 @@
+@import "../abstracts/variables";
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: url("@/assets/images/background.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #111111;
+  font-size: #{$remFontSize}px;
+  font-family: "Euclid Circular A", sans-serif;
+}

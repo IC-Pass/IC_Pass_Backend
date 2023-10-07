@@ -1,4 +1,4 @@
 [workspace]
 members = [
-    "src/icpass/system_api",
+    "src/system_api",
 ]

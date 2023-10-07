@@ -1,0 +1,14 @@
+$colors: (
+  "primary": $color-green-base,
+  "grey": $color-grey-700,
+);
+@mixin background($prefix: "") {
+  @each $name, $color in $colors {
+    &.#{$prefix}#{$name} {
+      background-color: $color;
+    }
+  }
+  &.transparent {
+    background-color: transparent;
+  }
+}

@@ -1,0 +1,18 @@
+.main-card-list {
+  &__item {
+    padding-bottom: rem(16);
+  }
+  &__item + &__item {
+    padding: rem(16) 0;
+    &:last-child {
+      padding-bottom: 0;
+    }
+    border-top: 1px solid $color-grey-700;
+  }
+  &__item-label {
+    color: $color-grey-200;
+    font-size: rem(12);
+    @extend .body-12 !optional;
+    margin-bottom: 4px;
+  }
+}

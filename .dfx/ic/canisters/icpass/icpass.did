@@ -1,0 +1,49 @@
+type UserId__1 = principal;
+type UserId = principal;
+type Result_1 = 
+ variant {
+   err: text;
+   ok: Profile;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Profile = 
+ record {
+   accounts: vec Account;
+   fullName: text;
+   id: UserId;
+ };
+type NewProfile = record {fullName: text;};
+type Account__1 = 
+ record {
+   id: UserId;
+   link: text;
+   mediaId: nat8;
+   notes: text;
+   password: text;
+   tagId: nat8;
+   usernameEmail: text;
+ };
+type Account = 
+ record {
+   id: UserId;
+   link: text;
+   mediaId: nat8;
+   notes: text;
+   password: text;
+   tagId: nat8;
+   usernameEmail: text;
+ };
+service : {
+  addNewAccount: (Account__1) -> (Result);
+  create: (NewProfile) -> (Result);
+  encrypted_ibe_decryption_key_for_caller: (blob) -> (text);
+  get: (UserId__1) -> (Result_1) query;
+  getOwnId: () -> (UserId__1) query;
+  healthcheck: () -> (bool);
+  ibe_encryption_key: () -> (text);
+  update: (Profile) -> (Result);
+}

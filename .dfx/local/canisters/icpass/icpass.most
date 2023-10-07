@@ -1,0 +1,37 @@
+// Version: 1.0.0
+type Account =
+  {
+    id : UserId;
+    link : Text;
+    mediaId : Nat8;
+    notes : Text;
+    password : Text;
+    tagId : Nat8;
+    usernameEmail : Text
+  };
+type AssocList<K, V> = List<(K, V)>;
+type AssocList__1<K, V> = AssocList<K, V>;
+type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
+type Hash = Nat32;
+type Key__1<K> = {hash : Hash; key : K};
+type Leaf<K, V> = {keyvals : AssocList__1<Key__1<K>, V>; size : Nat};
+type List<T> = ?(T, List<T>);
+type Media = {id : Nat8; name : Text};
+type Media__2 = Media;
+type Profile = {accounts : [Account]; fullName : Text; id : UserId};
+type Profile__3 = Profile;
+type Tag = {id : Nat8; name : Text};
+type Tag__2 = Tag;
+type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
+type UserId = Principal;
+type UserId__3 = UserId;
+actor {
+  stable var _mediaList : [Media__2];
+  stable var _profiles :
+    {
+      #branch : Branch<UserId__3, Profile__3>;
+      #empty;
+      #leaf : Leaf<UserId__3, Profile__3>
+    };
+  stable var _tagList : [Tag__2]
+};

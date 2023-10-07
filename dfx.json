@@ -1,23 +1,23 @@
 {
   "canisters": {
     "system_api": {
-      "candid": "src/icpass/system_api/vetkd_system_api.did",
+      "candid": "src/system_api/vetkd_system_api.did",
       "package": "vetkd_system_api",
       "type": "rust"
     },
     "icpass": {
-      "main": "src/icpass/backend/main.mo",
+      "main": "src/backend/main.mo",
       "type": "motoko"
     },
     "icpass_assets": {
       "dependencies": ["icpass"],
       "frontend": {
-        "entrypoint": "src/icpass/public/main.js"
+        "entrypoint": "index.html"
       },
       "type": "assets",
       "source": [
-        "src/icpass/public",
-        "dist/icpass_assets"
+        "src",
+        "dist"
       ]
     }
   },
