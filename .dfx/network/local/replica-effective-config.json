@@ -4,16 +4,16 @@
   "config": {
     "http_handler": {
       "port": null,
-      "write_port_to": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Frontend/.dfx/network/local/replica-configuration/replica-1.port"
+      "write_port_to": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Dapp/.dfx/network/local/replica-configuration/replica-1.port"
     },
     "state_manager": {
-      "state_root": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Frontend/.dfx/network/local/state/replicated_state"
+      "state_root": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Dapp/.dfx/network/local/state/replicated_state"
     },
     "crypto": {
-      "crypto_root": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Frontend/.dfx/network/local/state/crypto_store"
+      "crypto_root": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Dapp/.dfx/network/local/state/crypto_store"
     },
     "artifact_pool": {
-      "consensus_pool_path": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Frontend/.dfx/network/local/state/consensus_pool"
+      "consensus_pool_path": "/Users/tanishqbhardwaj/workspace/TanoICP/icpass/IC_Pass_Dapp/.dfx/network/local/state/consensus_pool"
     },
     "subnet_type": "application",
     "btc_adapter": {
@@ -22,7 +22,7 @@
     },
     "canister_http_adapter": {
       "enabled": true,
-      "socket_path": "/var/folders/x5/m1ncjpm126s6h3cdythyvhbr0000gn/T/ic-https-outcalls-adapter-socket.22980.1696669448"
+      "socket_path": "/var/folders/x5/m1ncjpm126s6h3cdythyvhbr0000gn/T/ic-https-outcalls-adapter-socket.32311.1696690006"
     },
     "log_level": "error",
     "artificial_delay": 600,

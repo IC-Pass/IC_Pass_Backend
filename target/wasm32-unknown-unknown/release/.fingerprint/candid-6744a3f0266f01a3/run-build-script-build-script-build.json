@@ -1,1 +1,0 @@
-{"rustc":15699327122048238920,"features":"","target":0,"profile":0,"path":0,"deps":[[14422713955586194035,"build_script_build",false,7347284722510230694]],"local":[{"RerunIfChanged":{"output":"wasm32-unknown-unknown/release/build/candid-6744a3f0266f01a3/output","paths":["src/parser/grammar.lalrpop"]}}],"rustflags":[],"metadata":0,"config":0,"compile_kind":0}
