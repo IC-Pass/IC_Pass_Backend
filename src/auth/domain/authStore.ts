@@ -90,6 +90,7 @@ export const useAuthStore = defineStore("auth", () => {
           ? await actorFromIdentity(identity.value)
           : null;
         homeStore.isWelcomePass = false;
+        console.log(await whoamiActor.value.ibe_encryption_key());
       },
     });
   }

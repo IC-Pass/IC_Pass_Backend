@@ -15,16 +15,17 @@ export const canisterId = "kqaaa-aaaam-abqwa-cai";
  * @return {import("@dfinity/agent").ActorSubclass<import("./icpass.did.js")._SERVICE>}
  */
 export const createActor = async (canisterId, options = {}) => {
-  console.warn(`Deprecation warning: you are currently importing code from .dfx. Going forward, refactor to use the dfx generate command for JavaScript bindings.
+  /*console.warn(`Deprecation warning: you are currently importing code from .dfx. Going forward, refactor to use the dfx generate command for JavaScript bindings.
 
-See https://internetcomputer.org/docs/current/developer-docs/updates/release-notes/ for migration instructions`);
+See https://internetcomputer.org/docs/current/developer-docs/updates/release-notes/ for migration instructions`);*/
   const agent = new HttpAgent({
     ...options.agentOptions,
     host: "https://icp0.io",
   });
   // Fetch root key for certificate validation during development
   // if (process.env.DFX_NETWORK !== "ic") {
-  if("ic" == "ic"){
+  if (import.meta.env.VITE_DFX_NETWORK === "ic") {
+    console.log(agent);
     agent.fetchRootKey().catch((err) => {
       console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
       console.error(err);
@@ -47,13 +48,25 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
       "system_notification" : IDL.Bool,
       "email_notification" : IDL.Bool,
     });
+    const newPassword = IDL.Record({
+      "id": IDL.Principal,
+      "tagId": IDL.nat8,
+      "link": IDL.text,
+      "password": IDL.text,
+      "usernameEmail": IDL.text,
+      "notes": IDL.text,
+      "mediaId": IDL.Text
+    });
     return IDL.Service({
       "create" : IDL.Func([NewProfile], [], ["call"]),
+      "addNewAccount": IDL.Func([newPassword], [], ["call"]),
       "get" : IDL.Func([UserId__1], [Profile], ["query"]),
       "getOwnId" : IDL.Func([], [UserId__1], ["query"]),
       "healthcheck" : IDL.Func([], [IDL.Bool], []),
       "search" : IDL.Func([IDL.Text], [IDL.Vec(Profile)], ["query"]),
       "update" : IDL.Func([Profile], [], []),
+      "encrypted_ibe_decryption_key_for_caller": IDL.Func([IDL.Text], [], ["call"]),
+      "ibe_encryption_key": IDL.Func([],[],["call"]),
     });
   };
   // Creates an actor with using the candid interface and the HttpAgent

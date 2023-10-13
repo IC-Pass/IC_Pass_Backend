@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@babel/types": "^7.23.0",
-    "@dfinity/agent": "^0.19.1",
+    "@dfinity/agent": "^0.19.3",
     "@dfinity/auth-client": "^0.19.1",
     "@popperjs/core": "^2.11.7",
     "@soerenmartius/vue3-clipboard": "^0.1.2",
