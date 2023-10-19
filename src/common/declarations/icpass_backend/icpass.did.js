@@ -7,22 +7,34 @@ export const idlFactory = ({ IDL }) => {
   });
   const UserId__1 = IDL.Principal;
   const UserId = IDL.Principal;
-  const Profile = IDL.Record({
-    "id" : UserId,
-    "show_wallet_number" : IDL.Bool,
-    "fullname" : IDL.Text,
-    "system_notification" : IDL.Bool,
-    "email_notification" : IDL.Bool,
-  });
   const newPassword = IDL.Record({
     "id": IDL.Principal,
-    "tagId": IDL.nat8,
-    "link": IDL.text,
-    "password": IDL.text,
-    "usernameEmail": IDL.text,
-    "notes": IDL.text,
-    "mediaId": IDL.nat8
+    "tagId": IDL.Nat8,
+    "link": IDL.Text,
+    "password": IDL.Text,
+    "usernameEmail": IDL.Text,
+    "notes": IDL.Text,
+    "mediaId": IDL.Nat8
   });
+  const Profile = IDL.Variant({
+    "ok": IDL.Record({
+      "id" : UserId,
+      "fullname" : IDL.Text,
+      "accounts": IDL.Vec(
+        IDL.Record({
+          "id": IDL.Principal,
+          "tagId": IDL.Nat8,
+          "link": IDL.Text,
+          "password": IDL.Text,
+          "usernameEmail": IDL.Text,
+          "notes": IDL.Text,
+          "mediaId": IDL.Nat8
+        }),
+      ),
+    }),
+    "error": IDL.Text
+  });
+
   return IDL.Service({
     "addNewAccount": IDL.Func([newPassword], [], ["call"]),
     "create" : IDL.Func([NewProfile], [], ["call"]),

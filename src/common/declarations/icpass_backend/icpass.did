@@ -1,12 +1,21 @@
 type UserId__1 = principal;
 type UserId = principal;
 type Profile = 
- record {
-   email_notification: bool;
-   fullname: text;
-   id: UserId;
-   show_wallet_number: bool;
-   system_notification: bool;
+ variant {
+    ok: record {
+        id: UserId
+        fullname: text
+        accounts: vec(record {
+            id: principal
+            tagId: nat8
+            link: text
+            password: text
+            usernameEmail: text
+            notes: text
+            mediaId: nat8
+        })
+    }
+    error: text
  };
 type NewProfile = 
  record {

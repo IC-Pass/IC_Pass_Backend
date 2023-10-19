@@ -41,12 +41,23 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
     });
     const UserId__1 = IDL.Principal;
     const UserId = IDL.Principal;
-    const Profile = IDL.Record({
-      "id" : UserId,
-      "show_wallet_number" : IDL.Bool,
-      "fullname" : IDL.Text,
-      "system_notification" : IDL.Bool,
-      "email_notification" : IDL.Bool,
+    const Profile = IDL.Variant({
+      "ok": IDL.Record({
+        "id" : UserId,
+        "fullname" : IDL.Text,
+        "accounts": IDL.Vec(
+          IDL.Record({
+            "id": IDL.Principal,
+            "tag_id": IDL.Nat8,
+            "link": IDL.Text,
+            "password": IDL.Text,
+            "username_email": IDL.Text,
+            "notes": IDL.Text,
+            "media_id": IDL.Nat8
+          }),
+        ),
+      }),
+      "error": IDL.Text
     });
     const newPassword = IDL.Record({
       "id": IDL.Principal,
