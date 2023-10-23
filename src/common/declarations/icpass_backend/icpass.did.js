@@ -1,9 +1,6 @@
 export const idlFactory = ({ IDL }) => {
   const NewProfile = IDL.Record({
-    "show_wallet_number" : IDL.Bool,
-    "fullname" : IDL.Text,
-    "system_notification" : IDL.Bool,
-    "email_notification" : IDL.Bool,
+    "fullName" : IDL.Text,
   });
   const UserId__1 = IDL.Principal;
   const UserId = IDL.Principal;
@@ -19,7 +16,7 @@ export const idlFactory = ({ IDL }) => {
   const Profile = IDL.Variant({
     "ok": IDL.Record({
       "id" : UserId,
-      "fullname" : IDL.Text,
+      "fullName" : IDL.Text,
       "accounts": IDL.Vec(
         IDL.Record({
           "id": IDL.Principal,

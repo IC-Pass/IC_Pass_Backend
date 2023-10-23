@@ -1,7 +1,10 @@
 @use "sass:math";
 @import "variables";
-@mixin min-desktop{
+@mixin min-desktop {
   @media (min-width: 769px) { @content; }
+}
+@mixin max-mob {
+  @media (max-width: 769px) { @content; }
 }
 @mixin modal {
   &__confirm {

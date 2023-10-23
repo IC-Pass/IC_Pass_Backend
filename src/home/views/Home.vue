@@ -6,6 +6,7 @@ import InstanceEditor from "@/home/views/parts/InstanceEditor.vue";
 import { useHomeStore } from "@/home/domain/homeStore";
 import { usePasswordStore } from "@/home/domain/passwordStore";
 import Welcome from "@/home/views/Welcome.vue";
+import {computed} from "vue";
 
 const passwordStore = usePasswordStore();
 
@@ -14,11 +15,21 @@ function closeInstanceEditor() {
   passwordStore.resetStore();
 }
 const homeStore = useHomeStore();
+const mobileHide = computed(() => {
+  return window.innerWidth < 769;
+});
 </script>
 <template>
   <div class="home">
-    <Welcome class="home__passwords" v-if="homeStore.isWelcomePass" />
-    <AppAllPasswords class="home__passwords" v-else />
+    <Welcome
+      class="home__passwords"
+      v-if="homeStore.isWelcomePass && !mobileHide"
+    />
+    <AppAllPasswords
+      class="home__passwords"
+      v-show="!mobileHide && !homeStore.activeCard.length"
+      v-else
+    />
     <Onboarding
       class="home__onboarding"
       v-if="homeStore.activeCard === 'onboarding'"

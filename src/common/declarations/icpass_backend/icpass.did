@@ -19,10 +19,7 @@ type Profile =
  };
 type NewProfile = 
  record {
-   email_notification: bool;
-   fullname: text;
-   show_wallet_number: bool;
-   system_notification: bool;
+   fullName: text;
  };
 type newPassword =
     record {

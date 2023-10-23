@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import AppLogo from "@/ui-kit/AppLogo.vue";
+import { computed } from "vue";
+const screenWidth = computed(() => {
+  return window.innerWidth || 0;
+});
 </script>
 <template>
   <div class="base-layout">
@@ -7,12 +11,13 @@ import AppLogo from "@/ui-kit/AppLogo.vue";
       <div class="base-layout__logo">
         <AppLogo />
       </div>
+
       <header>
         <slot name="header" />
       </header>
     </div>
     <div class="base-layout__content">
-      <aside>
+      <aside class="base-layout__navbar" v-if="screenWidth > 769">
         <slot name="aside" />
       </aside>
       <main>
@@ -27,14 +32,26 @@ import AppLogo from "@/ui-kit/AppLogo.vue";
   display: flex;
   flex-wrap: wrap;
   padding: rem(30) rem(24) rem(30) 0;
+  @media all and (max-width: 769px) {
+    padding: 0;
+  }
   &__header {
     width: 100%;
     display: flex;
+    @media all and (max-width: 769px) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
   header {
     padding: rem(26) rem(24) rem(28);
     height: rem(172);
     flex-grow: 1;
+    @media all and (max-width: 769px) {
+      width: 100%;
+      justify-content: center;
+      display: flex;
+    }
   }
   main {
     overflow-y: auto;
@@ -54,7 +71,7 @@ import AppLogo from "@/ui-kit/AppLogo.vue";
     align-items: center;
     justify-content: center;
   }
-  aside {
+  &__navbar {
     width: rem(350);
     padding: 0 rem(40);
   }

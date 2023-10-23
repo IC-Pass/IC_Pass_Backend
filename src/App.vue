@@ -36,9 +36,6 @@ watch(
 <template>
   <div>
     <BaseLayout>
-      <template #logo>
-        <AppHeader />
-      </template>
       <template #header>
         <AppHeader />
       </template>

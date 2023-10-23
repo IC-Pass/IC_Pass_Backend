@@ -138,8 +138,8 @@ function finishOnboarding() {
   }
   &__desc {
     font-weight: 300;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: rem(14);
+    line-height: rem(20);
     color: $color-grey-200;
   }
 }

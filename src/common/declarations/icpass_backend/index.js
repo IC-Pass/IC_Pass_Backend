@@ -34,10 +34,7 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
 
   const idlFactory_ = ({ IDL }) => {
     const NewProfile = IDL.Record({
-      "show_wallet_number" : IDL.Bool,
-      "fullname" : IDL.Text,
-      "system_notification" : IDL.Bool,
-      "email_notification" : IDL.Bool,
+      "fullName" : IDL.Text,
     });
     const UserId__1 = IDL.Principal;
     const UserId = IDL.Principal;

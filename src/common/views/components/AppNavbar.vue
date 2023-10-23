@@ -5,8 +5,6 @@ import { useRoute } from "vue-router";
 import AppBlockChainBtn from "@/common/views/components/AppBlockChainBtn.vue";
 const route = useRoute();
 
-const full = "25rem";
-
 const isDropdown = ref(true);
 
 const links = [
@@ -68,11 +66,7 @@ function checkRoute(currentRouteName: string): boolean {
       >
         <div class="navbar__link-header">
           <router-link :to="{ name: link.route }" class="navbar__link">
-            <AppIcon
-              class="navbar__icon"
-              size="xxl"
-              :name="link.icon"
-            />
+            <AppIcon class="navbar__icon" size="xxl" :name="link.icon" />
             <span class="navbar__item">
               {{ link.name }}
             </span>

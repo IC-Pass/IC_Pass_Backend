@@ -2,17 +2,10 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
 export interface NewProfile {
-  "show_wallet_number": boolean,
-  "fullname": string,
-  "system_notification": boolean,
-  "email_notification": boolean,
+  "fullName": string,
 }
 export interface Profile {
-  "id": UserId,
-  "show_wallet_number": boolean,
-  "fullname": string,
-  "system_notification": boolean,
-  "email_notification": boolean,
+  "fullName": string,
 }
 export interface New_Password {
   "id": UserId,
