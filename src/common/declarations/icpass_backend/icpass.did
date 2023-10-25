@@ -10,12 +10,14 @@ type Result =
    err: text;
    ok: text;
  };
+
 type Profile =
  record {
-   accounts: vec Account;
-   fullName: text;
-   id: UserId;
- };
+    accounts: vec Account;
+    fullName: text;
+    id: UserId;
+};
+
 type NewProfile = record {fullName: text;};
 type Account__1 =
  record {
@@ -37,6 +39,8 @@ type Account =
    tagId: nat8;
    usernameEmail: text;
  };
+
+type Result_1 = variant({ 'ok' : Profile, 'err' : text });
 service : {
   addNewAccount: (Account__1) -> (Result);
   create: (NewProfile) -> (Result);

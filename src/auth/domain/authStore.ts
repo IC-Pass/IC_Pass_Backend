@@ -63,31 +63,38 @@ export const useAuthStore = defineStore("auth", () => {
   > | null>(null);
 
   async function init() {
-    authClient.value = await AuthClient.create(defaultOptions.createOptions);
+    try {
+      authClient.value = await AuthClient.create(defaultOptions.createOptions);
 
-    isAuthenticated.value = await authClient.value.isAuthenticated();
+      isAuthenticated.value = await authClient.value.isAuthenticated();
 
-    identity.value = isAuthenticated.value
-      ? authClient.value.getIdentity()
-      : null;
+      identity.value = isAuthenticated.value
+        ? authClient.value.getIdentity()
+        : null;
 
-    whoamiActor.value = identity.value
-      ? await actorFromIdentity(identity.value)
-      : null;
-    isReady.value = true;
-    await whoamiActor.value.addNewAccount({
-        id: identity.value.getPrincipal(),
-        tagId: 1,
-        link: "https://facebook.com",
-        password: "eev34rtt4gdsFsg",
-        usernameEmail: "johnDoe@gmail.com",
-        notes: "test notes",
-        mediaId: 2,
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    console.log(await whoamiActor.value.get(identity.value.getPrincipal()));
+      whoamiActor.value = identity.value
+        ? await actorFromIdentity(identity.value)
+        : null;
+      isReady.value = true;
+      await whoamiActor.value.addNewAccount({
+          id: identity.value.getPrincipal(),
+          tagId: 2,
+          link: "https://facebook.com",
+          password: "eev34rtt4gdsFsg",
+          usernameEmail: "johnDoe@gmail.com",
+          notes: "test notes",
+          mediaId: 2,
+        })
+        .then((e) => {
+          console.log(e);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      console.log(await whoamiActor.value.get(identity.value.getPrincipal()));
+    } catch (e) {
+      console.log(e);
+    }
   }
   async function getUser() {
     const principal = identity.value.getPrincipal();

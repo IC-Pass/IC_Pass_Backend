@@ -1,34 +1,38 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
+export type UserId = Principal;
+export type UserId__1 = Principal;
+
 export interface NewProfile {
   "fullName": string,
 }
 
-export interface Password {
+export interface Account {
   "id": UserId,
-  "tagId": string,
+  "tagId": number,
   "link": string,
   "password": string,
   "usernameEmail": string,
   "notes": string,
-  "mediaId": string,
+  "mediaId": number,
 }
 export interface Profile {
   "id": string,
   "fullName": string,
-  "accounts": Password[]
+  "accounts": Account[]
 }
-export type UserId = Principal;
-export type UserId__1 = Principal;
+
 export type Result = {
   ok: string;
   err: string;
 };
+export type Result_1 = { "ok" : Profile, "err" : string };
+
 export interface _SERVICE {
-  "addNewAccount": ActorMethod<[New_Password], Result>,
+  "addNewAccount": ActorMethod<[Account], [Result]>,
   "create": ActorMethod<[NewProfile], undefined>,
-  "get": ActorMethod<[UserId__1], Profile>,
+  "get": ActorMethod<[UserId__1], [Result_1]>,
   "getOwnId": ActorMethod<[], UserId__1>,
   "healthcheck": ActorMethod<[], boolean>,
   "search": ActorMethod<[string], Array<Profile>>,

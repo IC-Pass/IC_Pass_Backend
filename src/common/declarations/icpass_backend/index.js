@@ -41,38 +41,38 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
     const Result = IDL.Variant({
       err: IDL.Text,
       ok: IDL.Text,
-    })
-    const Profile = IDL.Variant({
-      "ok": IDL.Record({
-        "id" : UserId,
-        "fullName" : IDL.Text,
-        "accounts": IDL.Vec(
-          IDL.Record({
-            "id": IDL.Principal,
-            "tag_id": IDL.Nat8,
-            "link": IDL.Text,
-            "password": IDL.Text,
-            "username_email": IDL.Text,
-            "notes": IDL.Text,
-            "media_id": IDL.Nat8
-          }),
-        ),
-      }),
-      "error": IDL.Text
     });
-    const newPassword = IDL.Record({
+
+    const Account = IDL.Record({
+      "id" : IDL.Principal,
+      "tagId" : IDL.Nat8,
+      "link" : IDL.Text,
+      "password" : IDL.Text,
+      "usernameEmail" : IDL.Text,
+      "notes" : IDL.Text,
+      "mediaId" : IDL.Nat8
+    });
+
+    const Account__1 = IDL.Record({
       "id": IDL.Principal,
-      "tagId": IDL.nat8,
-      "link": IDL.text,
-      "password": IDL.text,
-      "usernameEmail": IDL.text,
-      "notes": IDL.text,
-      "mediaId": IDL.Text
+      "tagId": IDL.Nat8,
+      "link": IDL.Text,
+      "password": IDL.Text,
+      "usernameEmail": IDL.Text,
+      "notes": IDL.Text,
+      "mediaId": IDL.Nat8
     });
+
+    const Profile = IDL.Record({
+      'id' : UserId,
+      'fullName' : IDL.Text,
+      'accounts' : IDL.Vec(Account),
+    });
+    const Result_1 = IDL.Variant({ 'ok' : Profile, 'err' : IDL.Text });
     return IDL.Service({
       "create" : IDL.Func([NewProfile], [], ["call"]),
-      "addNewAccount": IDL.Func([newPassword], [Result], ["call"]),
-      "get" : IDL.Func([UserId__1], [Profile], ["query"]),
+      "addNewAccount": IDL.Func([Account__1], [Result], ["call"]),
+      "get" : IDL.Func([UserId__1], [Result_1], ["query"]),
       "getOwnId" : IDL.Func([], [UserId__1], ["query"]),
       "healthcheck" : IDL.Func([], [IDL.Bool], []),
       "search" : IDL.Func([IDL.Text], [IDL.Vec(Profile)], ["query"]),
