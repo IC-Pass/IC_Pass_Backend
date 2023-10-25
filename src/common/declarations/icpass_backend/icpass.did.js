@@ -4,7 +4,11 @@ export const idlFactory = ({ IDL }) => {
   });
   const UserId__1 = IDL.Principal;
   const UserId = IDL.Principal;
-  const newPassword = IDL.Record({
+  const Result = IDL.Variant({
+    err: IDL.Text,
+    ok: IDL.Text,
+  });
+  const password = IDL.Record({
     "id": IDL.Principal,
     "tagId": IDL.Nat8,
     "link": IDL.Text,
@@ -13,27 +17,14 @@ export const idlFactory = ({ IDL }) => {
     "notes": IDL.Text,
     "mediaId": IDL.Nat8
   });
-  const Profile = IDL.Variant({
-    "ok": IDL.Record({
-      "id" : UserId,
-      "fullName" : IDL.Text,
-      "accounts": IDL.Vec(
-        IDL.Record({
-          "id": IDL.Principal,
-          "tagId": IDL.Nat8,
-          "link": IDL.Text,
-          "password": IDL.Text,
-          "usernameEmail": IDL.Text,
-          "notes": IDL.Text,
-          "mediaId": IDL.Nat8
-        }),
-      ),
-    }),
-    "error": IDL.Text
+  const Profile = IDL.Record({
+    "id" : UserId,
+    "fullName" : IDL.Text,
+    "accounts": password,
   });
 
   return IDL.Service({
-    "addNewAccount": IDL.Func([newPassword], [], ["call"]),
+    "addNewAccount": IDL.Func([password], [Result], ["call"]),
     "create" : IDL.Func([NewProfile], [], ["call"]),
     "get" : IDL.Func([UserId__1], [Profile], ["query"]),
     "getOwnId" : IDL.Func([], [UserId__1], ["query"]),

@@ -38,10 +38,14 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
     });
     const UserId__1 = IDL.Principal;
     const UserId = IDL.Principal;
+    const Result = IDL.Variant({
+      err: IDL.Text,
+      ok: IDL.Text,
+    })
     const Profile = IDL.Variant({
       "ok": IDL.Record({
         "id" : UserId,
-        "fullname" : IDL.Text,
+        "fullName" : IDL.Text,
         "accounts": IDL.Vec(
           IDL.Record({
             "id": IDL.Principal,
@@ -67,7 +71,7 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
     });
     return IDL.Service({
       "create" : IDL.Func([NewProfile], [], ["call"]),
-      "addNewAccount": IDL.Func([newPassword], [], ["call"]),
+      "addNewAccount": IDL.Func([newPassword], [Result], ["call"]),
       "get" : IDL.Func([UserId__1], [Profile], ["query"]),
       "getOwnId" : IDL.Func([], [UserId__1], ["query"]),
       "healthcheck" : IDL.Func([], [IDL.Bool], []),

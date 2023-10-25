@@ -4,10 +4,8 @@ import type { ActorMethod } from '@dfinity/agent';
 export interface NewProfile {
   "fullName": string,
 }
-export interface Profile {
-  "fullName": string,
-}
-export interface New_Password {
+
+export interface Password {
   "id": UserId,
   "tagId": string,
   "link": string,
@@ -16,11 +14,19 @@ export interface New_Password {
   "notes": string,
   "mediaId": string,
 }
+export interface Profile {
+  "id": string,
+  "fullName": string,
+  "accounts": Password[]
+}
 export type UserId = Principal;
 export type UserId__1 = Principal;
-
+export type Result = {
+  ok: string;
+  err: string;
+};
 export interface _SERVICE {
-  "addNewAccount": ActorMethod<[New_Password], undefined>,
+  "addNewAccount": ActorMethod<[New_Password], Result>,
   "create": ActorMethod<[NewProfile], undefined>,
   "get": ActorMethod<[UserId__1], Profile>,
   "getOwnId": ActorMethod<[], UserId__1>,

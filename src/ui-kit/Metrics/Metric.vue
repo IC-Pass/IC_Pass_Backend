@@ -28,7 +28,7 @@ const props = defineProps<{
         right: 0;
         top: 6px;
         height: 40px;
-        border-right: 1px solid red;
+        border-right: 1px solid $color-grey-500;
         content: "";
       }
     }
@@ -66,6 +66,13 @@ const props = defineProps<{
       border: none;
       font-size: 10px;
       line-height: 16px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      &:after {
+        line-height: 25px;
+        content: " >";
+      }
     }
   }
 }

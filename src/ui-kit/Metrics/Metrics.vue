@@ -22,5 +22,8 @@ const props = defineProps<{
 .metrics {
   display: flex;
   gap: rem(40);
+  @include max-mob() {
+    gap: 0;
+  }
 }
 </style>

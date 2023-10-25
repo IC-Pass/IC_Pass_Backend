@@ -13,6 +13,7 @@ const authStore = useAuthStore();
     desc="Connect your Internet Identity and start creating and managing your passwords."
     :img-src="illustrationSocials"
   >
+    <AppButton @click="authStore.getUser">get user</AppButton>
     <AppButton class="welcome__btn" type="white" @click="authStore.login">
       <div class="welcome__btn-content">
         <img :src="logoPlace" alt="" />

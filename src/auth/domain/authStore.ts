@@ -72,11 +72,27 @@ export const useAuthStore = defineStore("auth", () => {
       : null;
 
     whoamiActor.value = identity.value
-      ? await actorFromIdentity(identity)
+      ? await actorFromIdentity(identity.value)
       : null;
     isReady.value = true;
+    await whoamiActor.value.addNewAccount({
+        id: identity.value.getPrincipal(),
+        tagId: 1,
+        link: "https://facebook.com",
+        password: "eev34rtt4gdsFsg",
+        usernameEmail: "johnDoe@gmail.com",
+        notes: "test notes",
+        mediaId: 2,
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    console.log(await whoamiActor.value.get(identity.value.getPrincipal()));
   }
-
+  async function getUser() {
+    const principal = identity.value.getPrincipal();
+    console.log(await whoamiActor.value.get(principal));
+  }
   async function login() {
     const client = toRaw(authClient.value);
     client?.login({
@@ -90,8 +106,6 @@ export const useAuthStore = defineStore("auth", () => {
           ? await actorFromIdentity(identity.value)
           : null;
         homeStore.isWelcomePass = false;
-        // console.log(await whoamiActor.value.create({ fullName: "vladyslav" }));
-        console.log(await whoamiActor.value.get(identity.value.getPrincipal()));
       },
     });
   }
@@ -106,7 +120,6 @@ export const useAuthStore = defineStore("auth", () => {
       await whoamiActor.value.create(profile).catch((e) => {
         console.log(e);
       });
-      const principal = await whoamiActor.value.getOwnId();
     } catch (e) {
       console.log(e);
     }
@@ -123,6 +136,7 @@ export const useAuthStore = defineStore("auth", () => {
   return {
     init,
     localCreateActor,
+    getUser,
     login,
     isReady,
     isAuthenticated,
