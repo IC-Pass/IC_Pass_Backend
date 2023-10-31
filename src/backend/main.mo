@@ -96,6 +96,9 @@ actor ICPass {
     switch (Utils.hasAccess(msg.caller, account.id)) {
       case (true) {
         _profiles := directory.addNewAccount(_profiles, account);
+        if (Trie.size(_profiles) == 0) {
+          return #err("User not found")
+        };
         return #ok("Account added successfully!");
       };
       case _ {

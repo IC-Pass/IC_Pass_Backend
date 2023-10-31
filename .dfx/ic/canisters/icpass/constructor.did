@@ -19,6 +19,7 @@ type Profile =
 type NewProfile = record {fullName: text;};
 type Account__1 = 
  record {
+   createdAt: text;
    id: UserId;
    link: text;
    mediaId: nat8;
@@ -29,6 +30,7 @@ type Account__1 =
  };
 type Account = 
  record {
+   createdAt: text;
    id: UserId;
    link: text;
    mediaId: nat8;

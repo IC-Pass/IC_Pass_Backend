@@ -1,6 +1,7 @@
 // Version: 1.0.0
 type Account =
   {
+    createdAt : Text;
     id : UserId;
     link : Text;
     mediaId : Nat8;

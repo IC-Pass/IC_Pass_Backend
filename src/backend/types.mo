@@ -33,5 +33,6 @@ module {
     link: Text;
     tagId: Nat8;
     notes: Text;
+    createdAt: Text;
   };
 };
