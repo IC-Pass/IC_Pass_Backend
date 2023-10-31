@@ -42,8 +42,8 @@ module {
       Trie.put(_profiles, Utils.keyPrincipal(userId), Principal.equal, profile).0;
     };
 
-    public func addNewAccount(_profiles : Trie.Trie<UserId, Profile>, account : Account) {
-      var profilesObj = _profiles;
+    public func addNewAccount(_profiles : Trie.Trie<UserId, Profile>, account : Account): Trie.Trie<UserId, Profile> {
+      var profilesObj: Trie.Trie<UserId, Profile> = _profiles;
       var bufferAccounts : Buffer.Buffer<Account> = Buffer.Buffer<Account>(0);
       switch (findOne(profilesObj, account.id)) {
         case (?profile) {
@@ -57,8 +57,11 @@ module {
             accounts = Buffer.toArray(bufferAccounts);
           };
           profilesObj := updateOne(profilesObj, profile.id, profileObj);
+          return profilesObj;
         };
-        case _ {};
+        case _ {
+          return Trie.empty();
+        };
       };
     };
 

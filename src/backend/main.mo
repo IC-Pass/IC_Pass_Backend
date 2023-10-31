@@ -43,7 +43,7 @@ actor ICPass {
     }) -> async ({ encrypted_key : Blob });
   };
 
-  let vetkd_system_api : VETKD_SYSTEM_API = actor ("s55qq-oqaaa-aaaaa-aaakq-cai");
+  let vetkd_system_api : VETKD_SYSTEM_API = actor ("jbm23-syaaa-aaaap-abonq-cai");
 
   // Healthcheck
 
@@ -95,7 +95,7 @@ actor ICPass {
   public shared (msg) func addNewAccount(account : Account) : async (Result.Result<Text, Text>) {
     switch (Utils.hasAccess(msg.caller, account.id)) {
       case (true) {
-        directory.addNewAccount(_profiles, account);
+        _profiles := directory.addNewAccount(_profiles, account);
         return #ok("Account added successfully!");
       };
       case _ {
