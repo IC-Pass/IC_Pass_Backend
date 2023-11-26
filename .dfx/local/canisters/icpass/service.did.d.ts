@@ -4,6 +4,7 @@ import type { ActorMethod } from '@dfinity/agent';
 export interface Account {
   'id' : UserId,
   'tagId' : number,
+  'passwordStrength' : number,
   'link' : string,
   'password' : string,
   'createdAt' : string,
@@ -14,6 +15,7 @@ export interface Account {
 export interface Account__1 {
   'id' : UserId,
   'tagId' : number,
+  'passwordStrength' : number,
   'link' : string,
   'password' : string,
   'createdAt' : string,

@@ -3,6 +3,7 @@ export const idlFactory = ({ IDL }) => {
   const Account__1 = IDL.Record({
     'id' : UserId,
     'tagId' : IDL.Nat8,
+    'passwordStrength' : IDL.Nat8,
     'link' : IDL.Text,
     'password' : IDL.Text,
     'createdAt' : IDL.Text,
@@ -16,6 +17,7 @@ export const idlFactory = ({ IDL }) => {
   const Account = IDL.Record({
     'id' : UserId,
     'tagId' : IDL.Nat8,
+    'passwordStrength' : IDL.Nat8,
     'link' : IDL.Text,
     'password' : IDL.Text,
     'createdAt' : IDL.Text,

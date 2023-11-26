@@ -25,6 +25,7 @@ type Account__1 =
    mediaId: nat8;
    notes: text;
    password: text;
+   passwordStrength: nat8;
    tagId: nat8;
    usernameEmail: text;
  };
@@ -36,6 +37,7 @@ type Account =
    mediaId: nat8;
    notes: text;
    password: text;
+   passwordStrength: nat8;
    tagId: nat8;
    usernameEmail: text;
  };

@@ -1,4 +1,5 @@
 import Principal "mo:base/Principal";
+import Nat32 "mo:base/Nat32";
 
 module {
   public type UserId = Principal;
@@ -30,6 +31,7 @@ module {
     mediaId: Nat8;
     usernameEmail: Text;
     password: Text;
+    passwordStrength: Nat8;
     link: Text;
     tagId: Nat8;
     notes: Text;
