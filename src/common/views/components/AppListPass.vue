@@ -3,11 +3,23 @@ import type { PassListItem } from "@/common/domain/PassListItem";
 import AppChipsItem from "@/ui-kit/AppChipsItem.vue";
 import AppPassStrength from "@/ui-kit/AppPassStrength.vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
+import {usePopUpStore} from "@/common/domain/stores/popUpStore";
 
 defineProps<{
   list: PassListItem[];
   compressed?: boolean;
 }>();
+
+const popUpStore = usePopUpStore();
+
+function copyToClipBoard(text: string) {
+  navigator.clipboard.writeText(text);
+  popUpStore.showPopUp({
+    title: "Copied to clipboard",
+    description: "Facebook password copied to your clipboard.",
+    type: "success",
+  });
+}
 </script>
 <template>
   <table class="pass-list" cellpadding="0" cellspacing="0">
@@ -24,7 +36,7 @@ defineProps<{
             </div>
             <div>
               <p class="body-16">{{ item.template.label }}</p>
-              <p class="pass-item__email body-12">{{ item.email }}</p>
+              <p class="pass-item__email body-12">{{ item.usernameEmail }}</p>
             </div>
           </div>
         </td>
@@ -46,7 +58,7 @@ defineProps<{
         </td>
         <td v-if="!compressed">
           <div class="pass-item__cell">
-            <AppPassStrength password="link" />
+            <AppPassStrength :password="item.password" />
           </div>
         </td>
         <td>
@@ -57,7 +69,7 @@ defineProps<{
                 name="info-circle"
                 size="xxl"
               />
-              <AppIcon class="pass-item__action" name="copy" size="xxl" />
+              <AppIcon class="pass-item__action" name="copy" size="xxl" @click="copyToClipBoard(item.password)" />
               <AppIcon
                 class="pass-item__action"
                 name="edit"
@@ -83,6 +95,9 @@ defineProps<{
     &:hover td {
       background-color: $color-grey-700;
     }
+  }
+  @include max-mob {
+    overflow: auto;
   }
   &__cell {
     display: inline-flex;

@@ -1,11 +1,6 @@
 <script lang="ts" setup>
 import AppIcon from "@/ui-kit/AppIcon.vue";
-import facebook from "@/assets/images/socialMedia/Facebook.jpg";
-import flick from "@/assets/images/socialMedia/Flickr.jpg";
-import linkedin from "@/assets/images/socialMedia/Linkedin.jpg";
-import slack from "@/assets/images/socialMedia/Slack.jpg";
-import twitter from "@/assets/images/socialMedia/Twitter.jpg";
-import zoom from "@/assets/images/socialMedia/Zoom.jpg";
+import { templateOptions } from "@/common/domain/PassListItem";
 import AppInput from "@/ui-kit/AppInput.vue";
 import { ref } from "vue";
 const emit = defineEmits(["update:modelValue"]);
@@ -16,38 +11,6 @@ const props = defineProps<{
     imgSrc: string;
   };
 }>();
-const options = [
-  {
-    value: "facebook",
-    label: "Facebook",
-    imgSrc: facebook,
-  },
-  {
-    value: "flick",
-    label: "Flick",
-    imgSrc: flick,
-  },
-  {
-    value: "linkedin",
-    label: "Linkedin",
-    imgSrc: linkedin,
-  },
-  {
-    value: "slack",
-    label: "Slack",
-    imgSrc: slack,
-  },
-  {
-    value: "twitter",
-    label: "Twitter",
-    imgSrc: twitter,
-  },
-  {
-    value: "zoom",
-    label: "Zoom",
-    imgSrc: zoom,
-  },
-];
 const isOpen = ref(false);
 </script>
 <template>
@@ -74,12 +37,15 @@ const isOpen = ref(false);
     <div class="template-select__options">
       <div
         class="template-select__option"
-        v-for="(option, index) in options"
+        v-for="(option, index) in templateOptions"
         @click="emit('update:modelValue', option)"
         :key="index"
       >
         <div class="template-select__option-img">
-          <img :src="option.imgSrc" alt="" />
+          <img :src="option.imgSrc" alt="" v-if="option.imgSrc" />
+          <div v-else>
+            <AppIcon name="image" size="xl" class="template-select__icon" />
+          </div>
         </div>
         <p class="template-select__option-label">{{ option.label }}</p>
       </div>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 
 import HomeCard from "./HomeCard.vue";
 import AppButton from "@/ui-kit/AppButton.vue";
@@ -12,13 +12,24 @@ import AppTextarea from "@/ui-kit/AppTextarea.vue";
 import { usePasswordStore } from "@/home/domain/passwordStore";
 import PasswordGenerator from "@/home/views/parts/PasswordGenerator.vue";
 import SelectTag from "@/home/views/parts/SelectTag.vue";
-import {useHistoryStore} from "@/history/domain/historyStore";
+import { useAuthStore } from "@/auth/domain/authStore";
+import { usePopUpStore } from "@/common/domain/stores/popUpStore";
+import {
+  PasswordStrength,
+  PasswordStrengthColor,
+} from "@/home/domain/Password";
+import AppChipsItem from "@/ui-kit/AppChipsItem.vue";
+import { passwordStrength } from "check-password-strength";
+import { computed } from "vue";
 
 const passwordStore = usePasswordStore();
+const authStore = useAuthStore();
+const popUpStore = usePopUpStore();
 
 const isGeneratePassword = ref(false);
 const isSelectTag = ref(false);
 const isNew = ref(true);
+
 const templateModel = ref({
   value: "",
   label: "",
@@ -28,24 +39,74 @@ const tagModel = ref({
   label: "",
   value: "",
 });
-function setPassword(pass: string) {
+function setPassword(getPass: { password: string; passwordStrength: number }) {
   if (passwordStore.password) {
-    passwordStore.password.password = pass;
+    passwordStore.password.password = getPass.password;
+    passwordStore.password.passwordStrength = getPass.passwordStrength;
     isGeneratePassword.value = false;
   }
 }
+
+function handlePasswordChange(value: string) {
+  passwordStore.password.password = value;
+  passwordStore.password.passwordStrength = passwordStrength(value).id;
+}
+
 function setTag(tag: string) {
   if (passwordStore.password) {
     passwordStore.password.tag = tag;
     isSelectTag.value = false;
   }
 }
-function createItem() {
+async function createItem() {
   passwordStore.password.template = templateModel;
-  passwordStore.createPassword();
+  passwordStore.isLoading = true;
+  await passwordStore.createPassword();
+  await authStore.getUser();
+  popUpStore.showPopUp({
+    title: "Password created",
+    type: "success",
+  });
 }
+
+async function updatePassword() {
+  passwordStore.password.template = templateModel;
+  passwordStore.isLoading = true;
+  await passwordStore.updatePassword();
+  await authStore.getUser();
+  popUpStore.showPopUp({
+    title: "Password updated",
+    type: "success",
+  });
+}
+
+async function deletePassword() {
+  passwordStore.isLoading = true;
+  await passwordStore.deletePassword();
+  await authStore.getUser();
+  popUpStore.showPopUp({
+    title: "Password deleted",
+    type: "success",
+  });
+}
+
+const isMobile = computed(() => {
+  return window.innerWidth < 769;
+});
+
+watch(
+  () => passwordStore.password,
+  () => {
+    if (passwordStore.password && passwordStore.password.id) {
+      templateModel.value = passwordStore.password.template;
+      tagModel.value = passwordStore.password.tag;
+      isNew.value = false;
+    }
+  }
+);
+
 onMounted(() => {
-  if (passwordStore.password) {
+  if (passwordStore.password && passwordStore.password.id) {
     templateModel.value = passwordStore.password.template;
     tagModel.value = passwordStore.password.tag;
     isNew.value = false;
@@ -53,15 +114,28 @@ onMounted(() => {
 });
 </script>
 <template>
-  <HomeCard class="instance-editor" v-if="passwordStore.password">
+  <HomeCard
+    class="instance-editor"
+    v-if="passwordStore.password"
+    :isLoading="passwordStore.isLoading"
+  >
     <template #header>
       <div class="instance-editor__close" @click="$emit('close')">
-        <AppIcon size="xxl" name="cross-dark" />
+        <AppIcon size="xxl" :name="isMobile ? 'chevron-left' : 'cross-dark'" />
       </div>
-      <h3 class="instance-editor__title subtitle-12">{{ isNew ? 'Add new Item' : 'Edit item'}}</h3>
+      <h3 class="instance-editor__title subtitle-12">
+        {{ isNew ? "Add new Item" : "Edit item" }}
+      </h3>
+      <div
+        v-if="!isNew"
+        class="instance-editor__delete"
+        @click="deletePassword"
+      >
+        <AppIcon size="xxl" name="delete" />
+      </div>
     </template>
     <template #default>
-      <div class="instance-editor__content" v-show="!isSelectTag">
+      <div class="instance-editor__content">
         <div class="main-card-list">
           <div class="main-card-list__item">
             <AppTemplateSelect v-model="templateModel" />
@@ -83,8 +157,32 @@ onMounted(() => {
               label="Create password"
               placeholder="Type here"
               :default="passwordStore.password.password"
-              @handleInputValue="(value) => (passwordStore.password.password = value)"
-            />
+              @handleInputValue="(value) => handlePasswordChange(value)"
+            >
+              <template #label-append>
+                <div class="d-flex">
+                  <AppChipsItem
+                    v-if="
+                      passwordStore.password.passwordStrength ||
+                      passwordStore.password.passwordStrength === 0
+                    "
+                    :type="
+                      PasswordStrengthColor[
+                        passwordStore.password.passwordStrength || 1
+                      ]
+                    "
+                    size="xs"
+                    :label="
+                      PasswordStrength[passwordStore.password.passwordStrength]
+                    "
+                  />
+                  <Shield
+                    v-if="passwordStore.password.passwordStrength === 3"
+                    type="green"
+                  />
+                </div>
+              </template>
+            </AppInput>
           </div>
           <AppButton
             type="secondary"
@@ -119,22 +217,30 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="instance-overlay" v-if="isGeneratePassword || isSelectTag">
-        <PasswordGenerator
-          v-if="isGeneratePassword"
-          @handleSave="setPassword"
-          @close="() => (isGeneratePassword = false)"
-        />
-        <SelectTag
-          v-model="tagModel"
-          v-if="isSelectTag"
-          @handleSelect="setTag"
-          @close="() => (isSelectTag = false)"
-        />
+      <div class="instance-overlay" :class="{ active: isGeneratePassword || isSelectTag }">
+        <div class="instance-overlay__content">
+          <PasswordGenerator
+            v-if="isGeneratePassword"
+            @handleSave="setPassword"
+            @close="() => (isGeneratePassword = false)"
+          />
+          <SelectTag
+            v-model="tagModel"
+            v-if="isSelectTag"
+            class="instance-editor__select-tag"
+            @handleSelect="setTag"
+            @close="() => (isSelectTag = false)"
+          />
+        </div>
       </div>
     </template>
     <template #footer>
-      <AppButton type="primary" @click="createItem">Create Item</AppButton>
+      <AppButton v-if="isNew" type="primary" @click="createItem">
+        Create Item
+      </AppButton>
+      <AppButton v-else type="primary" @click="updatePassword">
+        Save changes
+      </AppButton>
     </template>
   </HomeCard>
 </template>
@@ -163,6 +269,17 @@ onMounted(() => {
     top: rem(22);
     left: rem(24);
     cursor: pointer;
+  }
+  &__delete {
+    position: absolute;
+    top: rem(22);
+    right: rem(24);
+    cursor: pointer;
+  }
+  &__select-tag {
+    margin-top: auto;
+    width: 100%;
+    height: auto;
   }
 }
 .profile {
@@ -270,6 +387,26 @@ onMounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  max-height: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: rgba(#000, 0.7);
+  transition: opacity 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  overflow: hidden;
+  &.active {
+    visibility: visible;
+    opacity: 1;
+  }
+  &__content {
+    width: 100%;
+    transform: translateY(100%);
+    transition: 0.5s;
+  }
+  &.active &__content {
+    transform: translateY(0);
+  }
 }
 </style>

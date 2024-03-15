@@ -13,7 +13,9 @@ export interface Account {
   "tagId": number,
   "link": string,
   "password": string,
+  "passwordStrength": number;
   "usernameEmail": string,
+  "createdAt": string,
   "notes": string,
   "mediaId": number,
 }

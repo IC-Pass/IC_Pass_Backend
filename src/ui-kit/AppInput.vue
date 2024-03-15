@@ -20,6 +20,8 @@ const props = defineProps<{
   placeholder?: string;
   min?: number;
   max?: number;
+  error?: boolean;
+  errorMessage?: string[];
   default?: string | number | Date | null;
   disabled?: boolean;
   locked?: boolean;
@@ -98,8 +100,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="input">
-    <div class="input__label" v-if="label?.length">{{ label }}</div>
+  <div class="input" :class="{ error: props.error }">
+    <div class="input__label" v-if="label?.length">
+      <p>{{ label }}</p>
+      <div><slot name="label-append" /></div>
+    </div>
     <div class="input__content">
       <svg class="input__search" v-if="props.isSearch">
         <use href="@/assets/icons/sprite.svg#search"></use>
@@ -122,6 +127,11 @@ onMounted(() => {
       <div class="input__icon">
         <AppIcon name="lock" size="xl" v-if="locked" />
       </div>
+    </div>
+    <div class="input__error" v-if="props.error">
+      <p v-for="error in props.errorMessage">
+        {{ error.$message }}
+      </p>
     </div>
   </div>
 </template>
@@ -173,8 +183,15 @@ onMounted(() => {
 
   &__label {
     color: $color-grey-200;
+    display: flex;
+    gap: 8px;
+    align-items: center;
     @extend .body-12 !optional;
     margin-bottom: 4px;
+  }
+
+  &.error &__label {
+    color: $color-red-base;
   }
 
   &__icon {
@@ -201,6 +218,14 @@ onMounted(() => {
   &__check {
     fill: $color-white;
     cursor: pointer;
+  }
+  &__error {
+    top: 100%;
+    position: absolute;
+    font-size: rem(12);
+    right: 0;
+    color: $color-red-base;
+    margin-top: rem(20);
   }
 }
 </style>

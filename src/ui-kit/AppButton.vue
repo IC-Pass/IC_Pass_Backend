@@ -40,19 +40,19 @@ const btnType = computed<string>(() => props.type || "");
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: rem(15) rem(28);
+    padding: 15px 28px;
     gap: 4px;
     color: $color-grey-50;
     border-radius: 8px;
-    font-size: rem(16);
+    font-size: 16px;
     font-weight: 300;
-    line-height: rem(22);
+    line-height: 22px;
     font-family: inherit;
     background-color: transparent;
     border: 1px solid $color-grey-50;
     cursor: pointer;
     transition: all 0.3s;
-    max-height: rem(52);
+    max-height: 52px;
   }
   &:focus {
     outline: none;

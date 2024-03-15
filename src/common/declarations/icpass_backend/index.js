@@ -25,7 +25,6 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
   // Fetch root key for certificate validation during development
   // if (process.env.DFX_NETWORK !== "ic") {
   if (import.meta.env.VITE_DFX_NETWORK === "ic") {
-    console.log(agent);
     agent.fetchRootKey().catch((err) => {
       console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
       console.error(err);
@@ -48,6 +47,8 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
       "tagId" : IDL.Nat8,
       "link" : IDL.Text,
       "password" : IDL.Text,
+      "passwordStrength": IDL.Nat8,
+      "createdAt": IDL.Text,
       "usernameEmail" : IDL.Text,
       "notes" : IDL.Text,
       "mediaId" : IDL.Nat8
@@ -58,8 +59,10 @@ See https://internetcomputer.org/docs/current/developer-docs/updates/release-not
       "tagId": IDL.Nat8,
       "link": IDL.Text,
       "password": IDL.Text,
+      "passwordStrength": IDL.Nat8,
       "usernameEmail": IDL.Text,
       "notes": IDL.Text,
+      "createdAt": IDL.Text,
       "mediaId": IDL.Nat8
     });
 

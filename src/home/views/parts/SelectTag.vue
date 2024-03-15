@@ -1,46 +1,13 @@
 <script lang="ts" setup>
-import { ref } from "vue";
 import HomeCard from "@/home/views/parts/HomeCard.vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
+import { tagOptions } from "@/common/domain/PassListItem";
 
 const emit = defineEmits(["handleSelect", "close"]);
 
 const props = defineProps<{
   modelValue: string;
 }>();
-const tagOptions = ref([
-  {
-    label: "Social Network",
-    value: "socials",
-    icon: "social",
-  },
-  {
-    label: "Banking",
-    value: "banking",
-    icon: "banking",
-  },
-  {
-    label: "E-commerce",
-    value: "ecommerce",
-    icon: "eCommerce",
-  },
-  {
-    label: "Services",
-    value: "services",
-    icon: "services",
-  },
-  {
-    label: "Education",
-    value: "education",
-    icon: "education",
-  },
-  {
-    label: "Other",
-    value: "other",
-    icon: "otherPassCategory",
-  },
-]);
-
 </script>
 <template>
   <HomeCard class="select-tag" isBack auto-height @back="emit('close')">

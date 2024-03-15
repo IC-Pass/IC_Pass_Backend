@@ -3,6 +3,9 @@ import Metric from "./Metric.vue";
 type metric = {
   title: string;
   value: number;
+  type?: "indigo" | "red" | "green" | "yellow";
+  percentage?: number;
+  strength: number;
 };
 const props = defineProps<{
   metrics: metric[];
@@ -15,6 +18,9 @@ const props = defineProps<{
       :key="metric.title"
       :title="metric.title"
       :value="metric.value"
+      :type="metric.type"
+      :strength="metric.strength"
+      :percentage="metric.percentage"
     />
   </div>
 </template>

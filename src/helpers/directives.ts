@@ -1,7 +1,8 @@
 export const clickOutSide = {
   mounted: function (el: any, binding: any) {
+    console.log(el);
     el.clickOutsideEvent = function (event: Event) {
-      if (!(el == event.target || el.contains(event.target))) {
+      if (!(el == event?.target || el.contains(event?.target))) {
         binding.value(event, el);
       }
     };
