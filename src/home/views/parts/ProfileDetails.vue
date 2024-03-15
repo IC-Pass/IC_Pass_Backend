@@ -1,11 +1,47 @@
 <script lang="ts" setup>
+import { computed, reactive } from "vue";
+import { useAuthStore } from "@/auth/domain/authStore";
+
 import HomeCard from "./HomeCard.vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
 import AppButton from "@/ui-kit/AppButton.vue";
 import AppInput from "@/ui-kit/AppInput.vue";
-import { useProfileStore } from "@/common/domain/stores/profileStore";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
-const profileStore = useProfileStore();
+const authStore = useAuthStore();
+
+const profile = reactive({
+  fullName: "",
+});
+const rules = {
+  fullName: { required },
+};
+
+const v$ = useVuelidate(rules, profile);
+
+const userLetters = computed(() => {
+  if (!profile.fullName) return "";
+  const userNameSplit = profile.fullName.split(" ");
+  let abbr = "";
+  if (userNameSplit.length > 1) {
+    for (let i = 0; i < 2; i++) {
+      abbr += userNameSplit[i][0];
+    }
+  } else {
+    abbr += userNameSplit[0][0];
+  }
+  return abbr;
+});
+function createProfile() {
+  authStore.createProfile(profile);
+}
+
+async function submitForm() {
+  if (await v$.value.$validate()) {
+    createProfile();
+  }
+}
 </script>
 <template>
   <HomeCard class="profile-details">
@@ -15,15 +51,18 @@ const profileStore = useProfileStore();
     <div class="profile-details__content profile">
       <div class="profile__avatar avatar">
         <div class="avatar__photo">
-          <img
+          <!--          <img
             v-if="profileStore.profile.avatar.length"
             class="avatar__photo-img"
             :src="profileStore.profile.avatar"
             alt=""
-          />
-          <div v-else><AppIcon name="image" class="avatar__icon" /></div>
+          />-->
+          <div>
+            {{ userLetters }}
+            <!--            <AppIcon name="image" class="avatar__icon" />-->
+          </div>
         </div>
-        <div class="avatar__info">
+        <!--        <div class="avatar__info">
           <p class="avatar__title body-16">Profile picture</p>
           <div class="avatar__btns">
             <label class="avatar__upload">
@@ -47,7 +86,7 @@ const profileStore = useProfileStore();
           <p class="avatar__ext body-12">
             *.png, *.jpeg files up to 2MB at least 400px by 400px
           </p>
-        </div>
+        </div>-->
       </div>
       <div class="profile__details">
         <div class="main-card-list">
@@ -56,12 +95,16 @@ const profileStore = useProfileStore();
               type="text"
               label="Full name"
               placeholder="Enter your name"
+              :default="profile.fullName"
+              :error="v$.fullName.$errors.length"
+              :error-message="v$.fullName.$errors"
+              @handleInputValue="(e) => (profile.fullName = e)"
             />
           </div>
           <div class="main-card-list__item">
             <AppInput
               type="text"
-              :default="profileStore.profile.wallet"
+              default="587a6b8ed07707248cce...9b0db46"
               label="Wallet"
               placeholder="Enter your Wallet"
               locked
@@ -71,11 +114,9 @@ const profileStore = useProfileStore();
             <p class="main-card-list__item-label">Your plan</p>
             <p class="profile__details-plan">
               <span class="profile__details-plan-name">
-                {{ profileStore.profile.plan.name }}&nbsp;
+                Basic&nbsp;
               </span>
-              <span v-if="profileStore.profile.plan">
-                {{ profileStore.profile.plan.period }}
-              </span>
+              <span>free forever</span>
               <AppIcon
                 size="xl"
                 name="info-circle"
@@ -87,7 +128,7 @@ const profileStore = useProfileStore();
       </div>
     </div>
     <template #footer>
-      <AppButton type="primary">Create Account</AppButton>
+      <AppButton type="primary" @click="submitForm">Create Account</AppButton>
     </template>
   </HomeCard>
 </template>
@@ -117,9 +158,12 @@ const profileStore = useProfileStore();
 .avatar {
   display: flex;
   align-items: center;
+  justify-content: center;
   &__photo {
     width: rem(96);
     height: rem(96);
+    font-size: rem(32);
+    text-transform: uppercase;
     border-radius: 50%;
     border: 1.5px dashed $color-grey-500;
     display: flex;
@@ -129,6 +173,8 @@ const profileStore = useProfileStore();
     div {
       background-color: $color-grey-700;
       border-radius: 50%;
+      width: 80%;
+      height: 80%;
       display: flex;
       align-items: center;
       justify-content: center;

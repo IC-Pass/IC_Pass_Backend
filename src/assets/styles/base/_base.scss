@@ -13,4 +13,14 @@ body {
   background-color: #111111;
   font-size: #{$remFontSize}px;
   font-family: "Euclid Circular A", sans-serif;
+  @include max-mob {
+    overflow: auto!important;
+    background: $color-grey-800;
+  }
+}
+
+html {
+  @include max-mob {
+    font-size: 12px !important;
+  }
 }

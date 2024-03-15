@@ -10,7 +10,7 @@ defineProps<{
   <HomeCard class="card-plug">
     <div class="card-plug__content">
       <h3 class="card-plug__title heading">{{ title }}</h3>
-      <p class="card-plug__desc">
+      <p class="card-plug__desc body-16">
         {{ desc }}
       </p>
       <img class="card-plug__img" :src="imgSrc" :alt="title + ' image'" />
@@ -37,8 +37,11 @@ defineProps<{
     width: rem(346);
     text-align: center;
     margin: 0 auto;
-    margin-top: rem(16.12);
+    margin-top: 16px;
     color: $color-grey-400;
+    @include max-mob {
+      width: rem(410);
+    }
   }
   &__img {
     display: block;
@@ -47,6 +50,9 @@ defineProps<{
     object-fit: contain;
     width: rem(457);
     height: rem(260);
+    @include max-mob {
+      margin-top: 30px;
+    }
   }
 }
 </style>

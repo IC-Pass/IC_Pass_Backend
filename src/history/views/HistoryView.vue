@@ -3,8 +3,10 @@ import AppListPass from "@/common/views/components/AppListPass.vue";
 import { useHistoryStore } from "@/history/domain/historyStore";
 import HomeCard from "@/home/views/parts/HomeCard.vue";
 import AppChipsItem from "@/ui-kit/AppChipsItem.vue";
+import {useAuthStore} from "@/auth/domain/authStore";
 
 const historyStore = useHistoryStore();
+const authStore = useAuthStore();
 </script>
 <template>
   <HomeCard class="history" narrow-content>
@@ -19,7 +21,7 @@ const historyStore = useHistoryStore();
         />
       </div>
     </template>
-    <AppListPass :list="historyStore.historyList" />
+    <AppListPass :list="authStore.user?.accounts" />
   </HomeCard>
 </template>
 <style scoped lang="scss">

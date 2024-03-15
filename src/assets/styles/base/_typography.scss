@@ -69,48 +69,50 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: $color-white;
   font-size: rem(16);
+  @include max-mob {
+    font-size: 12px;
+  }
 }
 .heading {
   font-family: 'Euclid Circular A', sans-serif;
   font-style: normal;
   font-weight: 300;
-  font-size: rem(40);
-  line-height: rem(36);
+  font-size: 40px;
+  line-height: 36px;
 }
 .subtitle-12 {
   font-family: 'Euclid Circular A', sans-serif;
-  font-size: rem(10);
+  font-size: 12px;
   font-style: normal;
   font-weight: 300;
-  line-height: rem(16);
+  line-height: 16px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 .subtitle-10 {
   font-style: normal;
   font-weight: 300;
-  font-size: rem(12);
-  line-height: rem(20);
+  font-size: 10px;
+  line-height: 20px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 .body-16 {
   font-family: 'Euclid Circular A', sans-serif;
   font-weight: 300;
-  font-size: rem(16);
-  line-height: rem(22);
+  font-size: 16px;
+  line-height: 22px;
 }
 .body-14 {
   font-family: 'Euclid Circular A', sans-serif;
   font-weight: 300;
-  font-size: rem(14);
-  line-height: rem(16);
+  font-size: 14px;
+  line-height: 16px;
 }
 .body-12 {
   font-weight: 300;
-  font-size: rem(12);
-  line-height: rem(12);
+  font-size: 12px;
+  line-height: 12px;
   letter-spacing: -0.25px;
-
 }
 

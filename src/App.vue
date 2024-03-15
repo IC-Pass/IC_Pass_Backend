@@ -11,8 +11,12 @@ import AppDialog from "@/common/views/components/AppDialog.vue";
 
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/auth/domain/authStore";
+import AppMainLoader from "@/ui-kit/AppMainLoader.vue";
+import { useModalStore } from "@/common/domain/stores/modalStore";
 
 const authStore = useAuthStore();
+const modalStore = useModalStore();
+
 const { isReady } = storeToRefs(authStore);
 if (isReady.value === false) {
   authStore.init();
@@ -36,9 +40,6 @@ watch(
 <template>
   <div>
     <BaseLayout>
-      <template #logo>
-        <AppHeader />
-      </template>
       <template #header>
         <AppHeader />
       </template>
@@ -56,6 +57,7 @@ watch(
   </div>
   <AppPopUp v-if="popUpStore.isPopUp" />
   <AppDialog />
+  <AppMainLoader v-if="modalStore.isMainLoader"/>
 </template>
 
 <style scoped lang="scss">

@@ -26,7 +26,7 @@ function handleClick() {
       @click="handleClick"
     >
       <AppIcon
-        :size="'md'"
+        :size="['xl', 'xxl'].includes(props.size)? 'xl' :'md'"
         :name="props.icon"
         v-if="props.icon"
         class="chips-item__icon"
@@ -56,17 +56,17 @@ function handleClick() {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: rem(16);
-    width: rem(20);
+    height: 16px;
+    min-width: 20px;
     color: $color-grey-900;
-    border-radius: rem(20);
+    border-radius: 20px;
     font-weight: 300;
-    font-size: rem(12);
-    line-height: rem(12);
-    margin-left: rem(8);
+    font-size: 12px;
+    line-height: 16px;
+    margin-left: 8px;
   }
   &__icon {
-    margin-right: rem(6);
+    margin-right: 6px;
   }
   &.lightGrey {
     background-color: #52555c;
@@ -84,24 +84,41 @@ function handleClick() {
     background-color: $color-green-base;
     color: $color-grey-900;
   }
+  &.yellow {
+    background-color: $color-lemon-base;
+    color: $color-grey-900;
+  }
+  &.red {
+    background-color: $color-red-base;
+    color: $color-grey-900;
+  }
   &.transparent {
     background-color: transparent;
   }
+  &.xxl {
+    height: auto;
+    font-size: 18px;
+    padding: 4px 10px 4px 6px;
+  }
+  &.xl {
+    height: auto;
+    font-size: 16px;
+    padding: 4px 10px 4px 6px;
+  }
   &.md {
-    padding: rem(4) rem(10) rem(4) rem(6);
-    font-size: rem(14);
-    line-height: rem(16);
+    padding: 4px 10px 4px 6px;
+    font-size: 14px;
+    line-height: 16px;
   }
   &.sm {
-    padding: rem(2) rem(8);
-    line-height: rem(14);
-    font-size: rem(12);
+    padding: 2px 8px;
+    line-height: 14px;
+    font-size: 12px;
   }
   &.xs {
-    padding: rem(2) rem(7);
-    line-height: rem(10);
-    font-size: rem(10);
+    padding: 2px 7px;
+    line-height: 10px;
+    font-size: 10px;
   }
-
 }
 </style>

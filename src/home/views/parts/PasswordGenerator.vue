@@ -14,19 +14,31 @@ import Shield from "@/assets/icons/shield.vue";
 import AppRange from "@/ui-kit/AppRange.vue";
 import AppToggle from "@/ui-kit/AppToggle.vue";
 import AppButton from "@/ui-kit/AppButton.vue";
+
+import { passwordStrength } from "check-password-strength";
+
+import {
+  PasswordStrength,
+  PasswordStrengthColor,
+} from "@/home/domain/Password";
+
 const emit = defineEmits(["handleSave", "close"]);
-const password = ref("HGsd$!%hdfFk$%#$df090fn");
 
 const isUppercase = ref(true);
 const isNumbers = ref(true);
 const isSpecialChr = ref(true);
 const passwordLength = ref(15);
 
+const passwordObj = ref({
+  password: "",
+  passwordStrength: 0,
+});
+
 const isEditPassword = ref(false);
 
 const computedPassword = computed(() => {
   let content = "";
-  password.value.split("").forEach((item) => {
+  passwordObj.value.password.split("").forEach((item) => {
     if (containsSpecialChars(item)) {
       content += `<span class="special-chr">${item}</span>`;
     } else if (containsNumber(item)) {
@@ -39,17 +51,23 @@ const computedPassword = computed(() => {
   });
   return content;
 });
+
+function checkStrength(pass: string) {
+  passwordObj.value.passwordStrength = passwordStrength(pass).id;
+}
+
 function newPassword() {
-  password.value = generatePassword({
+  passwordObj.value.password = generatePassword({
     passwordLength: passwordLength.value,
     isUppercase: isUppercase.value,
     isNumbers: isNumbers.value,
     isSpecialChr: isSpecialChr.value,
   });
+  checkStrength(passwordObj.value.password);
 }
 onMounted(() => {
   newPassword();
-})
+});
 </script>
 <template>
   <HomeCard class="pass-generator">
@@ -63,7 +81,15 @@ onMounted(() => {
       <div class="pass-generator__area generator-area">
         <div class="generator-area__header">
           <span class="generator-area__title">Password</span>
-          <AppChipsItem type="green" size="xs" label="Exelent" />
+          <AppChipsItem
+            v-if="
+              passwordObj.passwordStrength || passwordObj.passwordStrength === 0
+            "
+            :type="PasswordStrengthColor[passwordObj.passwordStrength || 1]"
+            :icon="passwordObj.passwordStrength === 3 ? 'shield' : ''"
+            size="xs"
+            :label="PasswordStrength[passwordObj.passwordStrength]"
+          />
           <shield type="green" />
           <AppIcon name="copy" size="xxl" class="generator-area__copy" />
           <AppIcon
@@ -80,7 +106,8 @@ onMounted(() => {
           >
             <textarea
               spellcheck="false"
-              v-model="password"
+              v-model="passwordObj.password"
+              @change="(e) => checkStrength(e.target.value)"
               @focus="() => (isEditPassword = true)"
               @blur="() => (isEditPassword = false)"
             />
@@ -138,7 +165,7 @@ onMounted(() => {
       </div>
     </div>
     <template #footer>
-      <AppButton type="primary" @click="emit('handleSave', password)">Save password</AppButton>
+      <AppButton type="primary" @click="emit('handleSave', passwordObj)">Save password</AppButton>
     </template>
   </HomeCard>
 </template>

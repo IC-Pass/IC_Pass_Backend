@@ -32,9 +32,9 @@ const props = defineProps<{
   }
   &__container {
     position: relative;
-    padding: rem(3) rem(8);
+    padding: 3px 8px;
     display: flex;
-    gap: rem(8);
+    gap: 8px;
     border-radius: 16px;
     background-color: $color-grey-700;
   }
@@ -48,10 +48,10 @@ const props = defineProps<{
   &__thumb {
     position: absolute;
     transition: 0.3s;
-    top: rem(3);
-    bottom: rem(3);
-    right: rem(3);
-    width: rem(32);
+    top: 3px;
+    bottom: 3px;
+    right: 3px;
+    width: 32px;
     border-radius: 32px;
     background-color: $color-grey-600;
   }

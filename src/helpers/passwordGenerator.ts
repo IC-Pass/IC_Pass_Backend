@@ -36,11 +36,12 @@ export function generatePassword(options: {
     allChars += specialChrs;
   }
   randPasswordArray = randPasswordArray.fill(allChars, 4);
-  return shuffleArray(
+  const result = shuffleArray(
     randPasswordArray.map(function (x) {
       return x[Math.floor(Math.random() * x.length)];
     })
   ).join("");
+  return result;
 }
 export function shuffleArray(array: any) {
   for (let i = array.length - 1; i > 0; i--) {

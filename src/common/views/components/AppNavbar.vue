@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import {computed, ref} from "vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
 import { useRoute } from "vue-router";
 import AppBlockChainBtn from "@/common/views/components/AppBlockChainBtn.vue";
 const route = useRoute();
-
-const full = "25rem";
 
 const isDropdown = ref(true);
 
@@ -50,6 +48,10 @@ const links = [
   },
 ];
 
+const screenWidth = computed(() => {
+  return window.innerWidth || 0;
+});
+
 function checkRoute(currentRouteName: string): boolean {
   return route.matched.map((item) => item.name).includes(currentRouteName);
 }
@@ -57,57 +59,59 @@ function checkRoute(currentRouteName: string): boolean {
 
 <template>
   <div class="navbar">
-    <div class="navbar__list">
-      <div
-        v-for="link in links"
-        :key="link.name"
-        class="navbar__list-item"
-        :class="{
-          active: link.route === $route.name,
-        }"
-      >
-        <div class="navbar__link-header">
-          <router-link :to="{ name: link.route }" class="navbar__link">
-            <AppIcon
-              class="navbar__icon"
-              size="xxl"
-              :name="link.icon"
-            />
-            <span class="navbar__item">
-              {{ link.name }}
-            </span>
-            <span class="navbar__item-chips" v-if="link.chips">
-              {{ link.chips }}
-            </span>
-          </router-link>
-          <button
-            class="navbar__chevron"
-            :class="{ reverse: !isDropdown }"
-            @click="isDropdown = !isDropdown"
-            v-if="link.children.length"
-          >
-            <AppIcon name="chevron-down" size="xs" />
-          </button>
-        </div>
-        <template v-if="link.children.length">
-          <Transition>
-            <div class="navbar__dropdown" v-if="isDropdown">
-              <router-link
-                v-for="child in link.children"
-                :key="child.name"
-                :to="{ name: child.route }"
-                class="navbar__dropdown-item"
-                :class="{ active: checkRoute(child.route) }"
-              >
-                {{ child.name }}
-              </router-link>
-            </div>
-          </Transition>
-        </template>
+    <div class="navbar__wrap">
+      <div v-if="screenWidth < 769">
+        <h1 class="heading navbar__title" v-text="'Menu'" />
+        <p class="body-12" v-text="'Categories'" />
       </div>
-    </div>
-    <div class="navbar__chain-btn">
-      <AppBlockChainBtn />
+      <div class="navbar__list">
+        <div
+          v-for="link in links"
+          :key="link.name"
+          class="navbar__list-item"
+          :class="{
+            active: link.route === $route.name,
+          }"
+        >
+          <div class="navbar__link-header">
+            <router-link :to="{ name: link.route }" class="navbar__link">
+              <AppIcon class="navbar__icon" size="xxl" :name="link.icon" />
+              <span class="navbar__item">
+                {{ link.name }}
+              </span>
+              <span class="navbar__item-chips" v-if="link.chips">
+                {{ link.chips }}
+              </span>
+            </router-link>
+            <button
+              class="navbar__chevron"
+              :class="{ reverse: !isDropdown }"
+              @click="isDropdown = !isDropdown"
+              v-if="link.children.length"
+            >
+              <AppIcon name="chevron-down" size="xs" />
+            </button>
+          </div>
+          <template v-if="link.children.length">
+            <Transition>
+              <div class="navbar__dropdown" v-if="isDropdown">
+                <router-link
+                  v-for="child in link.children"
+                  :key="child.name"
+                  :to="{ name: child.route }"
+                  class="navbar__dropdown-item"
+                  :class="{ active: checkRoute(child.route) }"
+                >
+                  {{ child.name }}
+                </router-link>
+              </div>
+            </Transition>
+          </template>
+        </div>
+      </div>
+      <div class="navbar__chain-btn">
+        <AppBlockChainBtn />
+      </div>
     </div>
   </div>
 </template>
@@ -121,10 +125,32 @@ function checkRoute(currentRouteName: string): boolean {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  @include max-mob {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding-top: rem(214);
+  }
+  &__title {
+    margin-bottom: rem(12);
+  }
+  &__wrap {
+    flex-grow: 1;
+    margin-top: auto;
+    padding: rem(36) rem(14) rem(24);
+    @include max-mob {
+      background-color: #242526;
+    }
+  }
   &__logo {
     width: rem(156);
     margin: 0 auto;
     display: block;
+  }
+  &__list {
+    @include max-mob {
+      margin-top: rem(22);
+    }
   }
   &__list-item {
     position: relative;
@@ -176,6 +202,7 @@ function checkRoute(currentRouteName: string): boolean {
     display: flex;
     align-items: center;
     gap: rem(12);
+    width: 100%;
     padding: rem(6) rem(10);
     text-decoration: none;
     position: relative;

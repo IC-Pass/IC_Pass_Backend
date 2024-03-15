@@ -14,7 +14,7 @@ const props = defineProps({
     type: String,
     default: "sm",
     validator: (value: string) => {
-      return ["xxs", "xs", "sm", "md", "lg", "xl", "xxl"].indexOf(value) >= 0;
+      return ["xxs", "xs", "sm", "md", "lg", "xl", "xxl", "xxxl"].indexOf(value) >= 0;
     },
   },
 });
@@ -35,14 +35,15 @@ $sizes: (
   "lg": 24,
   "xl": 28,
   "xxl": 32,
+  "xxxl": 36,
 );
 .icon {
   display: inline-block;
   flex-shrink: 0;
   @each $name, $size in $sizes {
     &.#{$name} {
-      width: #{$size / 16}rem;
-      height: #{$size / 16}rem;
+      width: #{$size}px;
+      height: #{$size}px;
     }
   }
   svg {

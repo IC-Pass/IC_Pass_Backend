@@ -1,36 +1,57 @@
 type UserId__1 = principal;
 type UserId = principal;
-type Profile = 
+type Result_1 =
+ variant {
+   err: text;
+   ok: Profile;
+ };
+type Result =
+ variant {
+   err: text;
+   ok: text;
+ };
+
+type Profile =
  record {
-   email_notification: bool;
-   fullname: text;
+    accounts: vec Account;
+    fullName: text;
+    id: UserId;
+};
+
+type NewProfile = record {fullName: text;};
+type Account__1 =
+ record {
    id: UserId;
-   show_wallet_number: bool;
-   system_notification: bool;
+   link: text;
+   mediaId: nat8;
+   createdAt: text;
+   passwordStrength: nat8;
+   notes: text;
+   password: text;
+   tagId: nat8;
+   usernameEmail: text;
  };
-type NewProfile = 
+type Account =
  record {
-   email_notification: bool;
-   fullname: text;
-   show_wallet_number: bool;
-   system_notification: bool;
+   id: UserId;
+   link: text;
+   mediaId: nat8;
+   createdAt: text;
+   notes: text;
+   password: text;
+   passwordStrength: nat8;
+   tagId: nat8;
+   usernameEmail: text;
  };
-type newPassword =
-    record {
-        id:principal;
-        tagId:nat8;
-        link:text;
-        password:text;
-        usernameEmail:text;
-        notes:text;
-        mediaId:nat8
-    };
+
+type Result_1 = variant({ 'ok' : Profile, 'err' : text });
 service : {
-    addNewAccount: (newPassword) -> (variant {ok:text; err:text})
-    create: (NewProfile) -> ();
-    get: (UserId__1) -> (Profile) query;
-    getOwnId: () -> (UserId__1) query;
-    healthcheck: () -> (bool);
-    search: (text) -> (vec Profile) query;
-    update: (Profile) -> ();
+  addNewAccount: (Account__1) -> (Result);
+  create: (NewProfile) -> (Result);
+  encrypted_ibe_decryption_key_for_caller: (blob) -> (text);
+  get: (UserId__1) -> (Result_1) query;
+  getOwnId: () -> (UserId__1) query;
+  healthcheck: () -> (bool);
+  ibe_encryption_key: () -> (text);
+  update: (Profile) -> (Result);
 }

@@ -100,11 +100,17 @@ function finishOnboarding() {
   padding: rem(39) rem(24) rem(24);
   position: relative;
   overflow: hidden;
+  @include max-mob {
+    overflow: auto;
+  }
   &__pagination {
     position: absolute;
     height: rem(8);
     top: rem(390);
     left: rem(24);
+    @include max-mob {
+      width: auto;
+    }
   }
   &__btn {
     margin-top: rem(24);
@@ -116,8 +122,10 @@ function finishOnboarding() {
     border: none;
     display: block;
     background: none;
+    cursor: pointer;
     letter-spacing: -0.5px;
     color: $color-grey-400;
+    z-index: 9;
   }
 }
 .onboarding-slide {
@@ -138,8 +146,8 @@ function finishOnboarding() {
   }
   &__desc {
     font-weight: 300;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: rem(14);
+    line-height: rem(20);
     color: $color-grey-200;
   }
 }

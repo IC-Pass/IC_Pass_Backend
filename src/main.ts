@@ -7,10 +7,8 @@ import { setupCalendar } from "v-calendar";
 import App from "./App.vue";
 
 import "./assets/styles/main.scss";
-import clickOutSide from "@/helpers/directives";
 
 const app = createApp(App);
-app.directive("clickOutside", clickOutSide);
 app.use(createPinia());
 app.use(router);
 app.use(dayjs);
@@ -43,5 +41,6 @@ const calculate = () => {
     page.style.fontSize = fontSize() + "px";
   }
 };
+calculate();
 
 window.addEventListener("resize", calculate);

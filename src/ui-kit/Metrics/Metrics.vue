@@ -1,40 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import Metric from "./Metric.vue";
-
-const metrics = [
-  {
-    title: "All passwords",
-    value: 0,
-  },
-  {
-    title: "Excellent",
-    value: 0,
-  },
-  {
-    title: "Good",
-    value: 0,
-  },
-  {
-    title: "Weak",
-    value: 0,
-  },
-  {
-    title: "Compromised",
-    value: 0,
-  },
-  {
-    title: "Reused",
-    value: 0,
-  },
-];
+type metric = {
+  title: string;
+  value: number;
+  type?: "indigo" | "red" | "green" | "yellow";
+  percentage?: number;
+  strength: number;
+};
+const props = defineProps<{
+  metrics: metric[];
+}>();
 </script>
 <template>
   <div class="metrics">
-    <metric
-      v-for="metric in metrics"
+    <Metric
+      v-for="metric in props.metrics"
       :key="metric.title"
       :title="metric.title"
       :value="metric.value"
+      :type="metric.type"
+      :strength="metric.strength"
+      :percentage="metric.percentage"
     />
   </div>
 </template>
@@ -42,5 +28,8 @@ const metrics = [
 .metrics {
   display: flex;
   gap: rem(40);
+  @include max-mob() {
+    gap: 0;
+  }
 }
 </style>

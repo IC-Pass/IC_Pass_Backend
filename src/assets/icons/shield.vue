@@ -34,8 +34,8 @@ const props = withDefaults(
           y2="19.877"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#272829"/>
-          <stop offset="1" stop-color="#272829" stop-opacity="0"/>
+          <stop stop-color="#272829" />
+          <stop offset="1" stop-color="#272829" stop-opacity="0" />
         </linearGradient>
       </defs>
     </svg>
@@ -65,7 +65,7 @@ const props = withDefaults(
           y2="12.5846"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#5CC172"/>
+          <stop stop-color="#5CC172" />
           <stop offset="1" stop-color="#5CC172" stop-opacity="0"/>
         </linearGradient>
       </defs>
