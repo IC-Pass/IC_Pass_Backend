@@ -1,11 +1,13 @@
 // Version: 1.0.0
 type Account =
   {
+    createdAt : Text;
     id : UserId;
     link : Text;
     mediaId : Nat8;
     notes : Text;
     password : Text;
+    passwordStrength : Nat8;
     tagId : Nat8;
     usernameEmail : Text
   };
