@@ -25,7 +25,7 @@ const percentageFill = computed(() => {
 
 function setWeaknessFilter() {
   homeStore.isWeaknessFilter = true;
-  homeStore.weaknessFilter = props.strength;
+  homeStore.weaknessFilter = props;
 }
 </script>
 <template>

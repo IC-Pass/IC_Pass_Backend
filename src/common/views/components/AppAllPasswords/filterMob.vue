@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AppChipsItem from "@/ui-kit/AppChipsItem.vue";
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
+import { useHomeStore } from "@/home/domain/homeStore";
 
 const emit = defineEmits(["handleChange"]);
 
@@ -9,6 +10,8 @@ const props = defineProps<{
   chips: any;
   currentItem: any;
 }>();
+
+const homeStore = useHomeStore();
 
 const isFilterMenu = ref(false);
 
@@ -19,7 +22,7 @@ function close() {
 }
 
 function clickOutside() {
-  if (!(dropdownRef.value == event?.target || dropdownRef.value.contains(event?.target))) {
+  if (!(dropdownRef.value == event?.target || dropdownRef.value?.contains(event?.target))) {
     close();
   }
 }
@@ -40,7 +43,11 @@ onMounted(() => {
         :key="props.currentItem.title"
         :label="props.currentItem.title"
         :icon="props.currentItem.icon"
-        :count="props.currentItem.value.length"
+        :count="
+          homeStore.isWeaknessFilter
+            ? undefined
+            : props.currentItem.value.length
+        "
         size="xl"
         class="passwords__header-chips"
       />
@@ -54,7 +61,7 @@ onMounted(() => {
         :key="chipsItem.title"
         :label="chipsItem.title"
         :icon="chipsItem.icon"
-        :count="chipsItem.value.length"
+        :count="homeStore.isWeaknessFilter ? undefined : chipsItem.value.length"
         size="xl"
         v-show="props.currentItem.title !== chipsItem.title"
         @handleClick="emit('handleChange', chipsItem)"
@@ -70,6 +77,7 @@ onMounted(() => {
     align-items: center;
     border-radius: 50px;
     background: $color-grey-700;
+    min-width: 248px;
   }
   &__dropdown {
     display: flex;
@@ -87,6 +95,7 @@ onMounted(() => {
   &__arrow {
     position: relative;
     color: $color-grey-500;
+    margin-left: auto;
     &:after {
       position: absolute;
       left: 0;

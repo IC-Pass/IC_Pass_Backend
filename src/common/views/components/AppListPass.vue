@@ -132,6 +132,7 @@ function copyToClipBoard(text: string) {
   }
   &__email {
     color: $color-grey-400;
+    word-break: break-word;
   }
   &__action {
     cursor: pointer;

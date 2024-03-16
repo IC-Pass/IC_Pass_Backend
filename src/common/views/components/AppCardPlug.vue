@@ -49,6 +49,7 @@ defineProps<{
     margin-top: rem(55.88);
     object-fit: contain;
     width: rem(457);
+    max-width: 100%;
     height: rem(260);
     @include max-mob {
       margin-top: 30px;

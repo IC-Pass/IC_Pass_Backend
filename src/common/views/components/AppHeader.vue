@@ -3,12 +3,28 @@ import { computed } from "vue";
 import Metrics from "@/ui-kit/Metrics/Metrics.vue";
 import { useAuthStore } from "@/auth/domain/authStore";
 import violet_blow from "@/assets/images/violet_blow.png";
-import {PasswordStrength} from "@/home/domain/Password";
+import { PasswordStrength } from "@/home/domain/Password";
+import { useHomeStore } from "@/home/domain/homeStore";
+import MetricMobile from "@/ui-kit/Metrics/MetricMobile.vue";
 
 const authStore = useAuthStore();
 
+const homeStore = useHomeStore();
+
 const screenWidth = computed(() => {
   return window.innerWidth || 0;
+});
+
+const chosenMetricValue = computed(() => {
+  if (Array.isArray(homeStore.weaknessFilter.value)) {
+    return homeStore.weaknessFilter.value.length;
+  } else {
+    return homeStore.weaknessFilter.value;
+  }
+});
+
+const isMobile = computed(() => {
+  return window.innerWidth < 769;
 });
 
 const metrics = computed(() => {
@@ -61,8 +77,19 @@ const metrics = computed(() => {
     <Metrics
       class="header__metrics"
       :metrics="screenWidth > 769 ? metrics : [...metrics].splice(0, 3)"
+      v-if="(isMobile && !homeStore.isWeaknessFilter) || !isMobile"
     />
-    <img :src="violet_blow" alt="" class="header__violet-blow">
+
+    <MetricMobile
+      v-else
+      class="header__metric-mobile"
+      :title="homeStore.weaknessFilter.title"
+      :value="chosenMetricValue"
+      :type="homeStore.weaknessFilter.type"
+      :strength="homeStore.weaknessFilter.strength"
+      :percentage="homeStore.weaknessFilter.percentage"
+    />
+    <img :src="violet_blow" alt="" class="header__violet-blow" />
   </div>
 </template>
 
@@ -80,6 +107,9 @@ const metrics = computed(() => {
       width: rem(10);
     }
   }
+  &__metric-mobile {
+    margin: 0 auto;
+  }
   &__metrics {
     @include max-mob() {
       &:deep(.metric) {
@@ -94,6 +124,7 @@ const metrics = computed(() => {
       width: rem(168);
       height: rem(168);
       position: absolute;
+      pointer-events: none;
       bottom: rem(-61);
       display: block;
       left: 50%;

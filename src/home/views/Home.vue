@@ -26,7 +26,10 @@ const isMobile = computed(() => {
   <div class="home">
     <Welcome
       class="home__passwords"
-      v-if="!authStore.isAuthenticated && (isMobile && homeStore.activeCard !== 'onboarding')"
+      v-if="
+        (!authStore.isAuthenticated && !isMobile) ||
+        (!authStore.isAuthenticated && isMobile && homeStore.activeCard !== 'onboarding')
+      "
     />
     <AppAllPasswords
       class="home__passwords"

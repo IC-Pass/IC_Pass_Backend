@@ -26,7 +26,7 @@ function handleClick() {
       @click="handleClick"
     >
       <AppIcon
-        :size="['xl', 'xxl'].includes(props.size)? 'xl' :'md'"
+        :size="['xl', 'xxl'].includes(props.size) ? 'xl' : 'md'"
         :name="props.icon"
         v-if="props.icon"
         class="chips-item__icon"
