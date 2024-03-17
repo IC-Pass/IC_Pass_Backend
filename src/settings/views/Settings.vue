@@ -6,15 +6,19 @@ import AppToggle from "@/ui-kit/AppToggle.vue";
 import {useAuthStore} from "@/auth/domain/authStore";
 import AppInput from "@/ui-kit/AppInput.vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
+import Logout from "@/settings/views/Logout.vue";
+import router from "@/infrastructure/router";
+import AppChipsItem from "@/ui-kit/AppChipsItem.vue";
 
 const profileStore = useProfileStore();
 const authStore = useAuthStore();
-const isEmailNotification = ref(false);
 
-const profile = computed(() => authStore.user)
+const isEmailNotification = ref(false);
+const isLogout = ref(false);
+
+const profile = computed(() => authStore.user);
 
 const userLetters = computed(() => {
-  console.log(authStore.user);
   if (!profile.value?.fullName) return "";
   const userNameSplit = profile.value.fullName.split(" ");
   let abbr = "";
@@ -27,12 +31,40 @@ const userLetters = computed(() => {
   }
   return abbr;
 });
+
+const isMobile = computed(() => {
+  return window.innerWidth < 769;
+});
+
+const isDetails = ref(false);
+
+async function logout() {
+  await authStore.logout();
+  router.push({ name: "Home" });
+  isLogout.value = false;
+}
 </script>
 <template>
   <div class="settings">
-    <HomeCard class="settings__config config" :is-loading="!profile">
+    <HomeCard
+      v-if="(isMobile && !isDetails) || !isMobile"
+      class="settings__config config"
+      :is-loading="!profile"
+    >
       <template #header>
         <div class="config__header">
+          <div v-if="isMobile" @click="() => (isDetails = true)">
+            <AppChipsItem
+              label="Edit profile"
+              icon="profile"
+              size="xxl"
+              class="config__profile-btn"
+            >
+              <template #custom-slot>
+                <AppIcon name="chevrone_right" size="xxs" style="margin-left: auto;" />
+              </template>
+            </AppChipsItem>
+          </div>
           <h1 class="heading config__title">{{ profile.fullName }}</h1>
           <p class="subtitle-10 config__subtitle">
             use pass since {{ profileStore.profile.createdDate }}
@@ -44,12 +76,14 @@ const userLetters = computed(() => {
           <AppToggle
             v-model="isEmailNotification"
             label="Email Notification"
+            disabled
             class="generator-area__toggle"
           />
         </div>
         <div class="main-card-list__item">
           <AppToggle
             v-model="isEmailNotification"
+            disabled
             label="System notifications"
             class="generator-area__toggle"
           />
@@ -57,29 +91,44 @@ const userLetters = computed(() => {
         <div class="main-card-list__item">
           <AppToggle
             v-model="isEmailNotification"
+            disabled
             label="Show my wallet number"
             class="generator-area__toggle"
           />
         </div>
       </div>
     </HomeCard>
-    <HomeCard class="settings__config config" :is-loading="!profile">
+    <HomeCard
+      v-if="(isMobile && isDetails) || !isMobile"
+      class="settings__config config"
+      :is-loading="!profile"
+    >
       <template #header>
         <div class="settings__config-header">
+          <AppIcon
+            v-if="isMobile"
+            name="chevron-left"
+            size="xxl"
+            class="settings__config-back"
+            @click="() => (isDetails = false)"
+          />
           <h3
             class="heading config__title subtitle-12"
             v-text="'Profile details'"
           />
-          <AppIcon name="logout" size="xxl" class="settings__config-exit" />
+          <AppIcon
+            name="logout"
+            size="xxl"
+            class="settings__config-exit"
+            @click="() => (isLogout = true)"
+          />
         </div>
       </template>
       <template #default>
         <div class="main-card-list__item d-flex">
           <div class="config__avatar avatar">
             <div class="avatar__photo">
-              <div>
-                {{ userLetters }}
-              </div>
+              <div v-text="userLetters" />
             </div>
           </div>
           <AppInput
@@ -103,16 +152,22 @@ const userLetters = computed(() => {
         <div class="main-card-list__item">
           <p class="main-card-list__item-label">Your plan</p>
           <p class="config__details-plan">
-            <span class="config__details-plan-name">
-              Basic&nbsp;
-            </span>
-            <span>free forever</span>
+            <span class="config__details-plan-name" v-text="'Basic'" />
+            <span v-text="'free forever'" />
             <AppIcon
               size="xl"
               name="info-circle"
               class="config__details-plan-info"
             />
           </p>
+        </div>
+        <div class="logout-overlay" :class="{ active: isLogout }">
+          <div class="logout-overlay__content">
+            <Logout
+              class="logout-overlay__logout"
+              @submit="logout"
+              @cancel="() => (isLogout = false)" />
+          </div>
         </div>
       </template>
     </HomeCard>
@@ -123,12 +178,25 @@ const userLetters = computed(() => {
   width: 100%;
   display: flex;
   gap: rem(10);
+  @include max-mob {
+    height: 100%;
+  }
   &__config {
     width: 50%;
+    @include max-mob {
+      width: 100%;
+    }
   }
   &__config-header {
     padding: rem(30);
     position: relative;
+  }
+  &__config-back {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
   &__config-exit {
     position: absolute;
@@ -142,7 +210,19 @@ const userLetters = computed(() => {
 }
 .config {
   &__header {
+    position: relative;
     padding: rem(24);
+    @include max-mob {
+      padding-bottom: rem(40);
+    }
+  }
+  &__profile-btn {
+    width: 200px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    z-index: 2;
   }
   &__title {
     text-align: center;
@@ -190,6 +270,36 @@ const userLetters = computed(() => {
       align-items: center;
       justify-content: center;
     }
+  }
+}
+.logout-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: rgba(#000, 0.7);
+  transition: opacity 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  overflow: hidden;
+  &.active {
+    visibility: visible;
+    opacity: 1;
+  }
+  &__content {
+    width: 100%;
+    transform: translateY(100%);
+    transition: 0.5s;
+  }
+  &.active &__content {
+    transform: translateY(0);
+  }
+  &__logout {
+    height: auto;
   }
 }
 </style>

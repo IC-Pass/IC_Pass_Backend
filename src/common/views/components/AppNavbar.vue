@@ -3,6 +3,7 @@ import {computed, ref} from "vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
 import { useRoute } from "vue-router";
 import AppBlockChainBtn from "@/common/views/components/AppBlockChainBtn.vue";
+import {useAuthStore} from "@/auth/domain/authStore";
 const route = useRoute();
 
 const isDropdown = ref(true);
@@ -132,7 +133,7 @@ function checkRoute(currentRouteName: string): boolean {
     padding-top: rem(214);
   }
   &__title {
-    margin-bottom: rem(12);
+    margin-bottom: 12px;
   }
   &__wrap {
     flex-grow: 1;
@@ -149,12 +150,13 @@ function checkRoute(currentRouteName: string): boolean {
   }
   &__list {
     @include max-mob {
-      margin-top: rem(22);
+      margin-top: 22px;
+      margin-bottom: 24px;
     }
   }
   &__list-item {
     position: relative;
-    margin-bottom: rem(12);
+    margin-bottom: 12px;
   }
   &__list-item.active &__link-header {
     background-color: $color-grey-800;
@@ -180,9 +182,9 @@ function checkRoute(currentRouteName: string): boolean {
     color: $color-grey-50;
   }
   &__item-chips {
-    padding: rem(5) rem(8);
+    padding: 5px 8px;
     font-weight: 300;
-    font-size: rem(12);
+    font-size: 12px;
     white-space: nowrap;
     border-radius: 20px;
     background: $color-grey-800;
@@ -201,9 +203,9 @@ function checkRoute(currentRouteName: string): boolean {
   &__link {
     display: flex;
     align-items: center;
-    gap: rem(12);
+    gap: 12px;
     width: 100%;
-    padding: rem(6) rem(10);
+    padding: 6px 10px;
     text-decoration: none;
     position: relative;
     transition: color 0.3s ease-out;
@@ -214,7 +216,7 @@ function checkRoute(currentRouteName: string): boolean {
     animation: fade 0.3s ease-out;
     transition: all 0.3s ease-out;
     font-weight: 300;
-    font-size: rem(16);
+    font-size: 16px;
     line-height: rem(22);
   }
   &__chevron {

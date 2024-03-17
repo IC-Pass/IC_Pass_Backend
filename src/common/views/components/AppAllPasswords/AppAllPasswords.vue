@@ -24,6 +24,7 @@ const currentList = ref(authStore.user?.accounts);
 
 const currentFilter = ref({
   title: "All",
+  icon: homeStore.isWeaknessFilter ? "shield-light" : "",
   value: authStore.user?.accounts || [],
 });
 
@@ -60,7 +61,7 @@ function setFilter(chip: any) {
   currentFilter.value = chip;
   currentList.value = chip.value;
   if (homeStore.isWeaknessFilter) {
-    homeStore.weaknessFilter = chip.strength;
+    homeStore.weaknessFilter = chip;
   }
 }
 
@@ -71,11 +72,17 @@ const isMobile = computed(() => {
 watch(() => homeStore.weaknessFilter,
   () => {
     if (homeStore.isWeaknessFilter) {
-      const data = chips.value?.find((chip) => chip.strength === homeStore.weaknessFilter);
+      const data = chips.value?.find((chip) => chip.strength === homeStore.weaknessFilter.strength);
       if (data) {
         currentFilter.value = data;
         currentList.value = data.value;
       }
+    } else {
+      currentList.value = authStore.user?.accounts || [];
+      currentFilter.value = {
+        title: "All",
+        value: authStore.user?.accounts || [],
+      };
     }
   }
 );
@@ -88,11 +95,12 @@ watch(
   }
 );
 onBeforeUnmount(() => {
-  homeStore.weaknessFilter = "";
+  homeStore.weaknessFilter = {};
   homeStore.isWeaknessFilter = false;
   currentList.value = authStore.user?.accounts;
   currentFilter.value = {
     title: "All",
+    icon: "",
     value: authStore.user?.accounts || [],
   };
 });
@@ -147,7 +155,10 @@ onBeforeUnmount(() => {
         @edit="(item) => setPasswordToEdit(item)"
         v-if="currentList?.length"
       />
-      <p class="passwords__no-content" v-else>No items</p>
+      <div class="passwords__no-content" v-else>
+        <h4 class="small-header">No "{{ currentFilter.title }}" passwords</h4>
+        <p class="subtitle-12">CHECK OTHER CATEGORIES</p>
+      </div>
     </div>
     <div class="passwords__footer">
       <AppButton icon-left="plus" type="primary" @click="addPassword">
@@ -193,7 +204,6 @@ onBeforeUnmount(() => {
     }
   }
   &__content {
-
     height: calc(100% - rem(200));
     overflow: auto;
     padding: rem(10) rem(8);
@@ -221,6 +231,12 @@ onBeforeUnmount(() => {
     text-align: center;
     padding: rem(16);
     font-size: rem(20);
+    h4 {
+      margin-bottom: 6px;
+    }
+    p {
+      color: $color-grey-400;
+    }
   }
   &__category-dropdown {
     position: relative;

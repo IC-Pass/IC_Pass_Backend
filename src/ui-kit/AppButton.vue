@@ -79,6 +79,7 @@ const btnType = computed<string>(() => props.type || "");
   &.danger {
     background-color: $color-red-base;
     border: none;
+    color: $color-grey-800;
     @include min-desktop() {
       &:hover {
         background-color: lighten($color-red-base, 5);

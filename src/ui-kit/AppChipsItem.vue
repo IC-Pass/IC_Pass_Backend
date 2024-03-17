@@ -26,7 +26,7 @@ function handleClick() {
       @click="handleClick"
     >
       <AppIcon
-        :size="['xl', 'xxl'].includes(props.size)? 'xl' :'md'"
+        :size="['xl', 'xxl'].includes(props.size) ? 'xl' : 'md'"
         :name="props.icon"
         v-if="props.icon"
         class="chips-item__icon"
@@ -35,6 +35,7 @@ function handleClick() {
       <p class="chips-item__count" v-if="typeof props.count === 'number'">
         {{ props.count }}
       </p>
+      <slot name="custom-slot" />
     </div>
   </div>
 </template>
@@ -51,6 +52,7 @@ function handleClick() {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   &__count {
     background-color: $color-grey-50;
     display: flex;

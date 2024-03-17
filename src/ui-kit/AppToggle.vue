@@ -2,16 +2,18 @@
 const props = defineProps<{
   modelValue: boolean;
   label: string;
+  disabled: boolean;
 }>();
 </script>
 <template>
-  <label class="toggle">
+  <label class="toggle" :class="{ disabled: props.disabled }">
     <span v-if="props.label || $slots.label" class="body-16 toggle__label">
       {{ props.label || "" }}
       <slot name="label" />
     </span>
     <input
       type="checkbox"
+      :disabled="props.disabled"
       :checked="props.modelValue"
       @input="(e) => $emit('update:modelValue', e.target.checked)"
     />
@@ -27,6 +29,15 @@ const props = defineProps<{
   position: relative;
   display: flex;
   align-items: center;
+
+  &.disabled &__label {
+    color: $color-grey-500;
+  }
+
+  &.disabled &__container {
+    color: $color-grey-500;
+  }
+
   &__label {
     margin-right: auto;
   }

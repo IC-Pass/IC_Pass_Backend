@@ -94,6 +94,9 @@ export const weaknessChips = (accounts) => {
       case PasswordStrength.Weak:
         weakness.weak.push(item);
         break;
+      case PasswordStrength.Too_weak:
+        weakness.weak.push(item);
+        break;
       case PasswordStrength.Good:
         weakness.good.push(item);
         break;
@@ -105,20 +108,28 @@ export const weaknessChips = (accounts) => {
   return [
     {
       title: "All",
+      icon: "shield-light",
+      type: "indigo",
       value: [...weakness.weak, ...weakness.good, ...weakness.excellent],
     },
     {
       title: "Excellent",
       strength: 3,
+      type: "green",
+      icon: "shield-light",
       value: weakness.excellent,
     },
     {
       title: "Good",
+      icon: "shield-light",
+      type: "yellow",
       strength: 2,
       value: weakness.good,
     },
     {
       title: "Weak",
+      type: "red",
+      icon: "shield-light",
       strength: 1,
       value: weakness.weak,
     },

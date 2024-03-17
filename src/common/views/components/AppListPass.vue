@@ -67,6 +67,7 @@ function copyToClipBoard(text: string) {
               <AppIcon
                 class="pass-item__action"
                 name="info-circle"
+                disabled
                 size="xxl"
               />
               <AppIcon class="pass-item__action" name="copy" size="xxl" @click="copyToClipBoard(item.password)" />
@@ -132,6 +133,7 @@ function copyToClipBoard(text: string) {
   }
   &__email {
     color: $color-grey-400;
+    word-break: break-word;
   }
   &__action {
     cursor: pointer;

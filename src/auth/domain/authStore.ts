@@ -60,6 +60,8 @@ export const useAuthStore = defineStore("auth", () => {
 
   const isReady = ref(false);
 
+  const isMenu = ref(false);
+
   const isAuthenticated = ref(false);
 
   const authClient = ref<AuthClient | null>(null);
@@ -173,6 +175,11 @@ export const useAuthStore = defineStore("auth", () => {
   async function logout() {
     const client = toRaw(authClient.value);
     await client?.logout();
+    resetStore();
+  }
+
+  function resetStore() {
+    user.value = null;
     isAuthenticated.value = false;
     identity.value = null;
     whoamiActor.value = null;
@@ -186,6 +193,7 @@ export const useAuthStore = defineStore("auth", () => {
     identity,
     whoamiActor,
     accountMetrics,
+    isMenu,
     init,
     createProfile,
     getUser,

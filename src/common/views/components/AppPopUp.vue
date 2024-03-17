@@ -24,6 +24,7 @@ const typeIcon = computed(() => {
       class="pop-up__icon"
       :class="store.message.type"
     />
+
     <div class="pop-up__content">
       <p
         v-if="store.message.title?.length"
@@ -67,7 +68,7 @@ const typeIcon = computed(() => {
     &.success {
       color: $color-green-base;
     }
-    &.erroe {
+    &.error {
       color: $color-red-base;
     }
   }
