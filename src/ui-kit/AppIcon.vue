@@ -55,6 +55,7 @@ $sizes: (
   &.disabled {
     cursor: not-allowed;
     pointer-events: none;
+    color: $color-grey-500;
   }
 }
 </style>

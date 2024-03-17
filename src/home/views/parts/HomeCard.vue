@@ -68,7 +68,8 @@ const contentHeight = computed(() => {
   @include max-mob {
     border-radius: 0;
     height: auto;
-    overflow: auto;
+    //overflow: auto;
+    overflow: visible;
   }
   &.autoHeight {
     align-self: flex-end;

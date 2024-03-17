@@ -94,6 +94,9 @@ export const weaknessChips = (accounts) => {
       case PasswordStrength.Weak:
         weakness.weak.push(item);
         break;
+      case PasswordStrength.Too_weak:
+        weakness.weak.push(item);
+        break;
       case PasswordStrength.Good:
         weakness.good.push(item);
         break;

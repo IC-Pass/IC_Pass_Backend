@@ -21,6 +21,7 @@ import {
 import AppChipsItem from "@/ui-kit/AppChipsItem.vue";
 import { passwordStrength } from "check-password-strength";
 import { computed } from "vue";
+import DeletePasswordApprove from "@/home/views/parts/deletePasswordApprove.vue";
 
 const passwordStore = usePasswordStore();
 const authStore = useAuthStore();
@@ -29,16 +30,19 @@ const popUpStore = usePopUpStore();
 const isGeneratePassword = ref(false);
 const isSelectTag = ref(false);
 const isNew = ref(true);
+const isDeletePopup = ref(false);
 
 const templateModel = ref({
   value: "",
   label: "",
   imgSrc: "",
 });
+
 const tagModel = ref({
   label: "",
   value: "",
 });
+
 function setPassword(getPass: { password: string; passwordStrength: number }) {
   if (passwordStore.password) {
     passwordStore.password.password = getPass.password;
@@ -58,15 +62,43 @@ function setTag(tag: string) {
     isSelectTag.value = false;
   }
 }
+
 async function createItem() {
   passwordStore.password.template = templateModel;
-  passwordStore.isLoading = true;
-  await passwordStore.createPassword();
-  await authStore.getUser();
-  popUpStore.showPopUp({
-    title: "Password created",
-    type: "success",
-  });
+  if (isPasswordValid()) {
+    passwordStore.isLoading = true;
+    await passwordStore.createPassword();
+    await authStore.getUser();
+    popUpStore.showPopUp({
+      title: "Password created",
+      type: "success",
+    });
+  }
+}
+
+function isPasswordValid() {
+  let errors = [];
+  if (passwordStore.password.template.value <= 0) {
+    errors.push("Template");
+  }
+  if (!passwordStore.password.password.length) {
+    errors.push("Password");
+  }
+  if (!passwordStore.password.usernameEmail.length) {
+    errors.push("Email");
+  }
+  if (errors.length) {
+    popUpStore.showPopUp({
+      title: "Error",
+      description: `${errors.join(", ")} ${
+        errors.length > 1 ? "are" : "is"
+      } required`,
+      type: "error",
+    });
+    return false;
+  } else {
+    return true;
+  }
 }
 
 async function updatePassword() {
@@ -129,7 +161,7 @@ onMounted(() => {
       <div
         v-if="!isNew"
         class="instance-editor__delete"
-        @click="deletePassword"
+        @click="() => (isDeletePopup = true)"
       >
         <AppIcon size="xxl" name="delete" />
       </div>
@@ -217,7 +249,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="instance-overlay" :class="{ active: isGeneratePassword || isSelectTag }">
+      <div class="instance-overlay" :class="{ active: isGeneratePassword || isSelectTag || isDeletePopup }">
         <div class="instance-overlay__content">
           <PasswordGenerator
             v-if="isGeneratePassword"
@@ -230,6 +262,12 @@ onMounted(() => {
             class="instance-editor__select-tag"
             @handleSelect="setTag"
             @close="() => (isSelectTag = false)"
+          />
+          <DeletePasswordApprove
+            v-if="isDeletePopup"
+            class="instance-editor__select-tag"
+            @submit="deletePassword"
+            @cancel="() => (isDeletePopup = false)"
           />
         </div>
       </div>

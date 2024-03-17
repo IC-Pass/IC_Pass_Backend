@@ -22,7 +22,6 @@ export const passwordToDto = (
 };
 
 export const passwordFromDto = (input: PasswordDto): Password => {
-  console.log(input);
   return {
     id: input.id,
     usernameEmail: input.usernameEmail,

@@ -4,13 +4,17 @@ import { computed, ref } from "vue";
 import AppIcon from "@/ui-kit/AppIcon.vue";
 import noise_bg_mob from "@/assets/images/noise_bg_mob.png";
 import {useHomeStore} from "@/home/domain/homeStore";
+import {useRoute} from "vue-router";
+import {useAuthStore} from "@/auth/domain/authStore";
 const screenWidth = computed(() => {
   return window.innerWidth || 0;
 });
 
 const homeStore = useHomeStore();
 
-const isMenu = ref(false);
+const authStore = useAuthStore();
+
+const route = useRoute();
 
 const backgroundUrl = computed(() => {
   return isMobile.value ? noise_bg_mob : "";
@@ -27,17 +31,16 @@ function closeStatistics() {
 
 function showMenu() {
   document.body.style = "overflow: hidden!important";
-  isMenu.value = true;
+  authStore.isMenu = true;
 }
 
 function closeMenu() {
   document.body.style.overflow = "auto";
-  isMenu.value = false;
+  authStore.isMenu = false;
 }
 </script>
 <template>
   <div class="base-layout">
-
     <div
       class="base-layout__header"
       :style="{ background: `url(${backgroundUrl})` }"
@@ -45,14 +48,20 @@ function closeMenu() {
     >
       <div class="base-layout__logo">
         <AppIcon
-          v-if="homeStore.isWeaknessFilter"
+          v-if="homeStore.isWeaknessFilter && isMobile"
           name="chevron-left"
           size="xl"
           class="base-layout__back"
           @click="closeStatistics"
         />
-        <AppLogo v-if="!homeStore.isWeaknessFilter" />
-        <p v-else class="subtitle-12 base-layout__statistic-title" v-text="'statistics'" />
+        <AppLogo
+          v-if="!isMobile || (!homeStore.isWeaknessFilter && isMobile)"
+        />
+        <p
+          v-else
+          class="subtitle-12 base-layout__statistic-title"
+          v-text="'statistics'"
+        />
         <AppIcon
           name="menu"
           size="xxxl"
@@ -68,7 +77,7 @@ function closeMenu() {
       <aside
         class="base-layout__navbar"
         :class="{ mob: isMobile }"
-        v-show="!isMobile || (isMobile && isMenu)"
+        v-show="!isMobile || (isMobile && authStore.isMenu)"
       >
         <AppIcon
           name="cross-light"

@@ -6,6 +6,7 @@ import HistoryView from "@/history/views/HistoryView.vue";
 import TeamView from "@/team/views/Team.vue";
 import MembersView from "@/members/views/members.vue";
 import SettingsView from "@/settings/views/Settings.vue";
+import {useAuthStore} from "@/auth/domain/authStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,9 +50,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
   if (to.name === "Login") {
     return next({ name: "Home" });
   }
+  authStore.isMenu = false;
   next();
 });
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useHomeStore } from "@/home/domain/homeStore";
+import router from "@/infrastructure/router";
 
 const homeStore = useHomeStore();
 
@@ -24,6 +25,7 @@ const percentageFill = computed(() => {
 });
 
 function setWeaknessFilter() {
+  router.push({ name: "Home" });
   homeStore.isWeaknessFilter = true;
   homeStore.weaknessFilter = props;
 }

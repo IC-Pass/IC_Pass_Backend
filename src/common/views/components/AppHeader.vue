@@ -6,10 +6,13 @@ import violet_blow from "@/assets/images/violet_blow.png";
 import { PasswordStrength } from "@/home/domain/Password";
 import { useHomeStore } from "@/home/domain/homeStore";
 import MetricMobile from "@/ui-kit/Metrics/MetricMobile.vue";
+import {useRoute} from "vue-router";
 
 const authStore = useAuthStore();
 
 const homeStore = useHomeStore();
+
+const route = useRoute();
 
 const screenWidth = computed(() => {
   return window.innerWidth || 0;
@@ -19,7 +22,7 @@ const chosenMetricValue = computed(() => {
   if (Array.isArray(homeStore.weaknessFilter.value)) {
     return homeStore.weaknessFilter.value.length;
   } else {
-    return homeStore.weaknessFilter.value;
+    return homeStore.weaknessFilter?.value || 0;
   }
 });
 
@@ -77,18 +80,19 @@ const metrics = computed(() => {
     <Metrics
       class="header__metrics"
       :metrics="screenWidth > 769 ? metrics : [...metrics].splice(0, 3)"
-      v-if="(isMobile && !homeStore.isWeaknessFilter) || !isMobile"
+      v-if="(isMobile && !homeStore.isWeaknessFilter && route.name === 'Home') || !isMobile"
     />
 
     <MetricMobile
-      v-else
+      v-else-if="route.name === 'Home'"
       class="header__metric-mobile"
-      :title="homeStore.weaknessFilter.title"
+      :title="homeStore.weaknessFilter?.title"
       :value="chosenMetricValue"
       :type="homeStore.weaknessFilter.type"
       :strength="homeStore.weaknessFilter.strength"
       :percentage="homeStore.weaknessFilter.percentage"
     />
+    <div id="headerPoint" />
     <img :src="violet_blow" alt="" class="header__violet-blow" />
   </div>
 </template>
