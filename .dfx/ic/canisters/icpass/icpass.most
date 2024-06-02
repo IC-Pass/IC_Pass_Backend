@@ -10,6 +10,7 @@ type Account =
     passwordStrength : Nat8;
     tagId : Nat8;
     usernameEmail : Text
+    label : Text
   };
 type AssocList<K, V> = List<(K, V)>;
 type AssocList__1<K, V> = AssocList<K, V>;

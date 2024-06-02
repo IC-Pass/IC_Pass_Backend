@@ -78,7 +78,7 @@ async function createItem() {
 
 function isPasswordValid() {
   let errors = [];
-  if (passwordStore.password.template.value <= 0) {
+  if (passwordStore.password.template.value < 0) {
     errors.push("Template");
   }
   if (!passwordStore.password.password.length) {

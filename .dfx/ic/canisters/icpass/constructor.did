@@ -28,6 +28,7 @@ type Account__1 =
    passwordStrength: nat8;
    tagId: nat8;
    usernameEmail: text;
+   label: text;
  };
 type Account = 
  record {
@@ -40,6 +41,7 @@ type Account =
    passwordStrength: nat8;
    tagId: nat8;
    usernameEmail: text;
+   label: text;
  };
 service : {
   addNewAccount: (Account__1) -> (Result);

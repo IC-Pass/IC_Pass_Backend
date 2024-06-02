@@ -11,6 +11,7 @@ export interface Account {
   'usernameEmail' : string,
   'notes' : string,
   'mediaId' : number,
+  'label' : string,
 }
 export interface Account__1 {
   'id' : UserId,
@@ -22,6 +23,7 @@ export interface Account__1 {
   'usernameEmail' : string,
   'notes' : string,
   'mediaId' : number,
+  'label' : string,
 }
 export interface NewProfile { 'fullName' : string }
 export interface Profile {

@@ -10,6 +10,7 @@ export const idlFactory = ({ IDL }) => {
     'usernameEmail' : IDL.Text,
     'notes' : IDL.Text,
     'mediaId' : IDL.Nat8,
+    'label' : IDL.Text,
   });
   const Result = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   const NewProfile = IDL.Record({ 'fullName' : IDL.Text });
@@ -24,6 +25,7 @@ export const idlFactory = ({ IDL }) => {
     'usernameEmail' : IDL.Text,
     'notes' : IDL.Text,
     'mediaId' : IDL.Nat8,
+    'label' : IDL.Text,
   });
   const Profile = IDL.Record({
     'id' : UserId,

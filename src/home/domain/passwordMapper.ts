@@ -8,6 +8,7 @@ export const passwordToDto = (
   input: Password & ID
 ): Promise<PasswordDto> => {
   const authStore = useAuthStore();
+  console.log('passwordToDto', input)
   return {
     id: input.id ? input.id : authStore?.identity.getPrincipal(),
     tagId: input.tag.value,
@@ -16,12 +17,14 @@ export const passwordToDto = (
     password: input.password,
     createdAt: input.createdAt,
     usernameEmail: input.usernameEmail,
-    notes: input.notes,
+    notes: input.template.label,
     mediaId: input.template.value,
+    label: input.template.label
   };
 };
 
 export const passwordFromDto = (input: PasswordDto): Password => {
+  console.log('passwordFromDto', input)
   return {
     id: input.id,
     usernameEmail: input.usernameEmail,
@@ -31,6 +34,7 @@ export const passwordFromDto = (input: PasswordDto): Password => {
     passwordStrength: input.passwordStrength,
     template: templateOptions[input.mediaId || 0],
     notes: input.notes,
+    label: input.label,
     tag: tagOptions[input.tagId || 0],
   };
 };

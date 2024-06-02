@@ -8,6 +8,7 @@ export type PasswordDto = {
   createdAt: string;
   tagId?: number;
   notes: string;
+  label?: string;
 };
 export type Password = {
   id?: any;
@@ -27,6 +28,7 @@ export type Password = {
     icon?: string;
   };
   notes: string;
+  label?: string;
 };
 
 export enum PasswordTagEnum {

@@ -61,8 +61,10 @@ export const usePasswordStore = defineStore("passwordStore", () => {
       if (!authStore.whoamiActor || !authStore.identity) return;
       const data = await passwordToDto({
         ...password.value,
+        label: password.value.template.label,
         createdAt: String(new Date()),
       } as any);
+      console.log('data', data)
       await authStore.whoamiActor
         .addNewAccount(data)
         .then((e) => {

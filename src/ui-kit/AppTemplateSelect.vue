@@ -12,6 +12,10 @@ const props = defineProps<{
   };
 }>();
 const isOpen = ref(false);
+function updateLabel(ev) {
+  const newModelValue = { ...props.modelValue, label: (ev.target as HTMLInputElement).value };
+  emit('update:modelValue', newModelValue);
+}
 </script>
 <template>
   <div class="template-select" :class="{ opened: isOpen }">
@@ -29,6 +33,7 @@ const isOpen = ref(false);
           label="Choose template"
           placeholder="Type here"
           :default="props.modelValue.label"
+          @input="updateLabel"
           @focus="() => (isOpen = true)"
           @blur="() => (isOpen = false)"
         />
